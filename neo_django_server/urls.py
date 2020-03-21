@@ -20,9 +20,10 @@ from django.urls import include, path
 urlpatterns = [
     path('admin/', admin.site.urls),
     #path('', include('password.urls')),
-    path('', include('password.urls')),
-    #path('password/', include('password.urls')),
-    path('password/', include(('password.urls', 'password'))),
+    #path('', include('main.urls')),
+    path('password/', include('password.urls')),
+    #path('password/', include(('password.urls', 'password'))),
+#path('password/', include(('password.urls', 'password'))),
 
 ]
 print('urlpatterns',urlpatterns)

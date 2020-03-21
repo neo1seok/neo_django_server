@@ -1,0 +1,10 @@
+{% if passwords %}
+<h1>{{exam_data}}</h1>
+    <ul>
+    {% for password in passwords %}
+        <li><a href="{% url 'password_detail'  password.id %}">{{ password.site }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No polls are available.</p>
+{% endif %}
