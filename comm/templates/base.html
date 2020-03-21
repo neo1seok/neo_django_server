@@ -27,7 +27,7 @@
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 
 
-    <link rel="stylesheet" href="{% static 'css/blog.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 
 
       <script src="{% static 'js/comm.js' %}"></script>
@@ -37,6 +37,27 @@
   </head>
   <body>
     {% block body %}
+
+    {% block script %}
+    {% endblock%}
+
+    <div class="page-header">
+        {% block app_button %}
+        <a href="#" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>
+        {% endblock%}
+        <h1><a href="/">neo1seok's 홈피</a></h1>
+                {% block title %}
+                {% endblock %}
+
+        </div>
+        <div class="content container">
+            <div class="row">
+                <div class="col-md-8">
+                {% block content %}
+                {% endblock %}
+                </div>
+            </div>
+        </div>
 
     {% endblock%}
     </body>
