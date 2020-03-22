@@ -6,8 +6,8 @@ urlpatterns = [
     #path('', views.password_list, name='password_list'),
 	path('', views.PasswordListView.as_view(), name='password_list'),
 
-	path('idx', views.IndexView.as_view(), name='password_idx'),
-	path('new', views.password_new, name='password_new'),
+	path('idx/', views.IndexView.as_view(), name='password_idx'),
+	path('new/', views.password_new, name='password_new'),
 
     #path('<int:pk>/', views.password_detail, name='password_detail'),
 	path('<int:pk>/', views.PasswordDetailView.as_view(), name='password_detail'),

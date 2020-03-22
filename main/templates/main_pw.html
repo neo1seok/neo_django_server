@@ -1,4 +1,6 @@
-{% extends 'password.html' %}
+{% extends 'base.html' %}
+{% load static %}
+
 
 {% block content %}
 
@@ -11,8 +13,6 @@
             <p>{{ password.ptail|linebreaksbr }}</p>
         </div>
     {% endfor %}
+
 {% endblock %}
 
-{% block title %}
-<h1>{{exam}}</h1>
-{% endblock %}
