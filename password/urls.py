@@ -15,4 +15,5 @@ urlpatterns = [
 
     # path('post/new', views.password_new, name='password_new'),
     path('<int:pk>/edit/', views.password_edit, name='password_edit'),
+	path('<int:pk>/edit_header/', views.password_edit, name='password_edit_header'),
 ]

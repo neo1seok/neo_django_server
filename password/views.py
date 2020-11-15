@@ -6,7 +6,7 @@ from django.views import generic
 
 from comm.function import exam_function
 from .forms import PasswordForm
-from .models import Password
+from .models import Password, PasswordHeader
 from django.shortcuts import render, get_object_or_404
 from django.shortcuts import redirect
 
@@ -57,9 +57,25 @@ def password_new(request):
 			password.author = request.user
 			password.published_date = timezone.now()
 			password.save()
-			return redirect('password_detail', pk=password.pk)
+			return redirect('password:password_detail', pk=password.pk)
 	else:
 		form = PasswordForm()
+	return render(request, 'password_edit.html', {'form': form})
+
+
+
+def password_edit(request, pk):
+	password = get_object_or_404(Password, pk=pk)
+	if request.method == "POST":
+		form = PasswordForm(request.POST, instance=password)
+		if form.is_valid():
+			password = form.save(commit=False)
+#			post.author = request.user
+#			post.published_date = timezone.now()
+			password.save()
+			return redirect('password_detail', pk=password.pk)
+	else:
+		form = PasswordForm(instance=password)
 	return render(request, 'password_edit.html', {'form': form})
 
 
@@ -89,24 +105,35 @@ class PasswordDetailView(generic.DetailView):
 		return context
 
 
+class PasswordHeaderDetailView(generic.DetailView):
+	template_name = 'password_header_detail.html'
+	context_object_name = 'password_header'
+	model = PasswordHeader
+	# def get_queryset(self):
+	#     """Return the last five published questions."""
+	#     return Question.objects.order_by('-pub_date')[:5]
+
+	# def get_queryset(self):
+	# 	"""
+	# 	Return the last five published questions (not including those set to be
+	# 	published in the future).
+	# 	"""
+	# 	return Password.objects.filter(
+	# 		updt_date__lte=timezone.now()
+	# 	).order_by('-updt_date')[:5]
+
+	def get_context_data(self, **kwargs):
+		# Call the base implementation first to get a context
+		context = super().get_context_data(**kwargs)
+		# Add in a QuerySet of all the books
+		context['exam'] = 'exam data'
+		return context
+
+
 def password_detail(request, pk):
 	password = get_object_or_404(Password, pk=pk)
 	return render(request, 'password_detail.html', {'password': password})
 
-
-def password_edit(request, pk):
-	password = get_object_or_404(Password, pk=pk)
-	if request.method == "POST":
-		form = PasswordForm(request.POST, instance=password)
-		if form.is_valid():
-			password = form.save(commit=False)
-#			post.author = request.user
-#			post.published_date = timezone.now()
-			password.save()
-			return redirect('password_detail', pk=password.pk)
-	else:
-		form = PasswordForm(instance=password)
-	return render(request, 'password_edit.html', {'form': form})
 
 
 class IndexView(generic.ListView):
