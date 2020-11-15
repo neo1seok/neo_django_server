@@ -40,7 +40,7 @@
 
     {% block script %}
     {% endblock%}
-
+<div class="w3-container">
     <div class="page-header">
         {% block app_button %}
         <a href="#" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>
@@ -48,8 +48,25 @@
         <h1><a href="/">neo1seok's 홈피</a></h1>
                 {% block title %}
                 {% endblock %}
+    {% block nav_block %}
+<div class="w3-bar w3-black">
+<a class="w3-bar-item w3-button w3-mobile"  href={% url 'main:main'  %} >Home</a>
+<a class="w3-bar-item w3-button w3-mobile" href = {% url 'webtoon:main'  %}  > 웹툰</a>
+<a class="w3-bar-item w3-button w3-mobile" href = {% url 'password:main'  %}  > 패스워드</a>
+<a class="w3-bar-item w3-button w3-mobile" href = {% url 'health:main'  %}  > 건강정보</a>
+<a class="w3-bar-item w3-button w3-mobile" href = {% url 'private_link:main'  %} > 개인링크</a>
 
-        </div>
+{% if user.is_authenticated %}
+<a  class="w3-bar-item w3-button w3-mobile" href="{% url 'access:logout' %}">{{ user.username }} (로그아웃)</a>
+{% else %}
+<a class="w3-bar-item w3-button w3-mobile" href = {% url 'access:login'  %} > login</a>
+
+{% endif %}
+
+</div>
+    {% endblock%}
+    </div>
+
         <div class="content container">
             <div class="row">
                 <div class="col-md-8">
@@ -58,6 +75,8 @@
                 </div>
             </div>
         </div>
+
+</div>
 
     {% endblock%}
     </body>

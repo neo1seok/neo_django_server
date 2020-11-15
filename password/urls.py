@@ -1,10 +1,11 @@
 from django.urls import path
 from . import views
-
+from django.views.generic import RedirectView
 
 urlpatterns = [
     #path('', views.password_list, name='password_list'),
-	path('', views.PasswordListView.as_view(), name='password_list'),
+	path('', RedirectView.as_view(url='/password/list'),name='main'),
+	path('list/', views.PasswordListView.as_view(), name='password_list'),
 
 	path('idx/', views.IndexView.as_view(), name='password_idx'),
 	path('new/', views.password_new, name='password_new'),

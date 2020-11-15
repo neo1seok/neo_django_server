@@ -16,14 +16,21 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.urls import include, path
+from django.views.generic import RedirectView
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', RedirectView.as_view(url='/main'),name='main'),
+    #path('login/', RedirectView.as_view(url='/admin/login'),name='login'),
+
+    path('access/', include(('access.urls','access'),namespace='access')),
     #path('', include('password.urls')),
-    path('', include('main.urls')),
+    path('main/', include(('main.urls','main'),namespace='main')),
     path('password/', include(('password.urls','password'),namespace='password')),
-    #path('password/', include(('password.urls', 'password'))),
-#path('password/', include(('password.urls', 'password'))),
+    path('health/', include(('health.urls','health'),namespace='health')),
+    path('webtoon/', include(('webtoon.urls','webtoon'),namespace='webtoon')),
+    path('private_link/', include(('private_link.urls','private_link'),namespace='private_link')),
 
 ]
 print('urlpatterns',urlpatterns)
