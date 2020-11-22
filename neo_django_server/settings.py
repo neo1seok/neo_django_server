@@ -40,7 +40,11 @@ INSTALLED_APPS = [
     'password',
     'access',
     'comm',
-    'main'
+    'main',
+    'health',
+    'webtoon',
+    'private_link',
+
 
 
 ]

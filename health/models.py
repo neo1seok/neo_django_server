@@ -2,7 +2,7 @@ from django.db import models
 
 # Create your models here.
 
-class Header(models.Model):
+class Health(models.Model):
 
 	sys_bp = models.IntegerField(blank=True,default=None)
 	dia_bp = models.IntegerField(blank=True,default=None)
