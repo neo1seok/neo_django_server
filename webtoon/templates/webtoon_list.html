@@ -1,0 +1,18 @@
+{% extends 'webtoon.html' %}
+
+{% block content %}
+
+    {% for webtoon in webtoons %}
+        <div class="webtoon">
+            <div class="date">
+                {{ webtoon.updt_date }}
+            </div>
+            <h1><a href="{% url 'webtoon:webtoon_detail' pk=webtoon.pk %}">{{ webtoon.site }}</a></h1>
+            <p>{{ webtoon.ptail|linebreaksbr }}</p>
+        </div>
+    {% endfor %}
+{% endblock %}
+
+{% block title %}
+<h1>{{exam}}</h1>
+{% endblock %}

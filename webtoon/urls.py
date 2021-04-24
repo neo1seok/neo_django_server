@@ -3,7 +3,9 @@ from . import views
 
 
 urlpatterns = [
-    path('', views.main_view, name='main'),
+    path('', views.WebtoonListView.as_view(), name='main'),
+
+    path('new/', views.WebtoonCreateView.as_view(), name='webtoon_new'),
 
 
 ]

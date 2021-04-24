@@ -29,18 +29,7 @@ class PasswordListView(generic.ListView):
 	template_name = 'password_list.html'
 	context_object_name = 'passwords'
 	model = Password
-	# def get_queryset(self):
-	#     """Return the last five published questions."""
-	#     return Question.objects.order_by('-pub_date')[:5]
 
-	# def get_queryset(self):
-	# 	"""
-	# 	Return the last five published questions (not including those set to be
-	# 	published in the future).
-	# 	"""
-	# 	return Password.objects.filter(
-	# 		updt_date__lte=timezone.now()
-	# 	).order_by('-updt_date')[:5]
 
 	def get_context_data(self, **kwargs):
 		# Call the base implementation first to get a context
@@ -78,24 +67,25 @@ def password_edit(request, pk):
 		form = PasswordForm(instance=password)
 	return render(request, 'password_edit.html', {'form': form})
 
+class PasswordNewView(generic.CreateView):
+	template_name = 'password_edit.html'
+	context_object_name = 'password'
+	model = Password
+	fields = ('pheader','site', 'ptail','site_id','etc')
+
+
+class PasswordEditView(generic.UpdateView):
+	template_name = 'password_edit.html'
+	context_object_name = 'password'
+	model = Password
+	fields = ('pheader','site', 'ptail','site_id','etc')
 
 
 class PasswordDetailView(generic.DetailView):
 	template_name = 'password_detail.html'
 	context_object_name = 'password'
 	model = Password
-	# def get_queryset(self):
-	#     """Return the last five published questions."""
-	#     return Question.objects.order_by('-pub_date')[:5]
 
-	# def get_queryset(self):
-	# 	"""
-	# 	Return the last five published questions (not including those set to be
-	# 	published in the future).
-	# 	"""
-	# 	return Password.objects.filter(
-	# 		updt_date__lte=timezone.now()
-	# 	).order_by('-updt_date')[:5]
 
 	def get_context_data(self, **kwargs):
 		# Call the base implementation first to get a context
@@ -104,23 +94,25 @@ class PasswordDetailView(generic.DetailView):
 		context['exam'] = 'exam data'
 		return context
 
+
+class PasswordHeaderNewView(generic.CreateView):
+	template_name = 'password_edit.html'
+	context_object_name = 'password_header'
+	model = PasswordHeader
+	fields = ('title','hint', 'special_letter','etc')
+
+
+class PasswordHeaderEditView(generic.UpdateView):
+	template_name = 'password_edit.html'
+	context_object_name = 'password_header'
+	model = PasswordHeader
+	fields = ('title','hint', 'special_letter','etc')
 
 class PasswordHeaderDetailView(generic.DetailView):
 	template_name = 'password_header_detail.html'
 	context_object_name = 'password_header'
 	model = PasswordHeader
-	# def get_queryset(self):
-	#     """Return the last five published questions."""
-	#     return Question.objects.order_by('-pub_date')[:5]
 
-	# def get_queryset(self):
-	# 	"""
-	# 	Return the last five published questions (not including those set to be
-	# 	published in the future).
-	# 	"""
-	# 	return Password.objects.filter(
-	# 		updt_date__lte=timezone.now()
-	# 	).order_by('-updt_date')[:5]
 
 	def get_context_data(self, **kwargs):
 		# Call the base implementation first to get a context
@@ -130,10 +122,11 @@ class PasswordHeaderDetailView(generic.DetailView):
 		return context
 
 
-def password_detail(request, pk):
-	password = get_object_or_404(Password, pk=pk)
-	return render(request, 'password_detail.html', {'password': password})
-
+#
+# def password_detail(request, pk):
+# 	password = get_object_or_404(Password, pk=pk)
+# 	return render(request, 'password_detail.html', {'password': password})
+#
 
 
 class IndexView(generic.ListView):
