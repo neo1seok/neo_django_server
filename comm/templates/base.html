@@ -1,6 +1,10 @@
 {% load static %}
+
+<!DOCTYPE html>
 <html>
-  <head>
+<title>neo1seok's hompage</title>
+
+ <head>
     {% block head %}
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -28,6 +32,8 @@
 
 
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
 
       <script src="{% static 'js/comm.js' %}"></script>
@@ -35,21 +41,16 @@
     {% endblock%}
 
   </head>
-  <body>
-    {% block body %}
 
-    {% block script %}
-    {% endblock%}
-<div class="w3-container">
-    <div class="page-header">
-        {% block app_button %}
-        <a href="#" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>
-        {% endblock%}
-        <h1><a href="/">neo1seok's 홈피</a></h1>
-                {% block title %}
-                {% endblock %}
-    {% block nav_block %}
-<div class="w3-bar w3-black">
+
+
+
+<body>
+
+<!-- Sidebar -->
+<div class="w3-sidebar w3-light-grey w3-bar-block" style="width:25%">
+  <h3 class="w3-bar-item">Menu</h3>
+  <div class="w3-bar w3-black">
 <a class="w3-bar-item w3-button w3-mobile"  href={% url 'main:main'  %} >Home</a>
 <a class="w3-bar-item w3-button w3-mobile" href = {% url 'webtoon:main'  %}  > 웹툰</a>
 <a class="w3-bar-item w3-button w3-mobile" href = {% url 'password:main'  %}  > 패스워드</a>
@@ -64,20 +65,30 @@
 {% endif %}
 
 </div>
+</div>
+
+<!-- Page Content -->
+<div style="margin-left:25%">
+
+<div class="w3-container w3-black">
+  <h1>neo1seok's hompage</h1>
+</div>
+
+<div class="w3-container">
+  {% block body %}
+
+    {% block script %}
     {% endblock%}
-    </div>
 
-
-
-        <div class="content">
-             {% block content %}
+      {% block content %}
               {% endblock %}
-
-        </div>
+{% endblock%}
 
 </div>
 
-    {% endblock%}
-    </body>
+</div>
 
+</body>
 </html>
+
+
