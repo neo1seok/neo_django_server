@@ -22,7 +22,7 @@ class Portal(models.Model):
 
 
 class Webtoon(models.Model):
-	prt_uid = models.TextField()  # varchar(20)
+	#prt_uid = models.TextField()  # varchar(20)
 	portal = models.ForeignKey(Portal, on_delete=models.CASCADE)
 	title = models.CharField(max_length=64)  # varchar(64)
 	today_title = models.TextField()  # text
