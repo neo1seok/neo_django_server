@@ -28,7 +28,26 @@
 </head>
 
 <body id="page-top">
+<script >
+const incomingToken = "{{ csrf_token }}";
+setCookie('csrf',incomingToken,1);
 
+{% block custom_js %}
+{% endblock %}
+
+$(()=> {
+    console.log('body load');
+
+
+{% block on_load_js %}
+{% endblock %}
+
+
+
+})
+
+
+</script>
     <!-- Page Wrapper -->
     <div id="wrapper">
 

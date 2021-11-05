@@ -23,4 +23,4 @@ class JcsgContents(models.Model):
 
 
 	def __str__(self):
-		return f"제 {self.no} 화 - {self.title}"
+		return f"{self.no} 화 - {self.title}"

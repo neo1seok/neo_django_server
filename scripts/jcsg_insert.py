@@ -15,3 +15,15 @@ def run():
 		tmp['pk'] = pk
 		JcsgContents.objects.create(**tmp)
 		pk +=1
+		
+	result = json.loads(neoutil.StrFromFile("rsc/result_spinoff.json"))
+	print("start",len(result))
+	#JcsgContents.objects.all().delete()
+	
+	for tmp in result:
+		no = tmp['no']
+		print(no)
+		tmp['pk'] = pk
+		tmp['no'] = f"외전 {no}"
+		JcsgContents.objects.create(**tmp)
+		pk +=1
