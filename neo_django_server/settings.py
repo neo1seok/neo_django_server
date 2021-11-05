@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+from django.db.backends.mysql.base import DatabaseWrapper
+DatabaseWrapper.data_types['DateTimeField'] = 'datetime'
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -94,16 +96,17 @@ DATABASES = {
          'NAME': 'neo_django_server',  # DB명
          'USER': 'neo1seok',  # 데이터베이스 계정
          'PASSWORD': 'tofhdna1pi',  # 계정 비밀번호
-         'HOST': 'localhost',  # 데이테베이스 주소(IP)
+         'HOST_': 'localhost',  # 데이테베이스 주소(IP)
+        'HOST': '192.168.219.17',  # 데이테베이스 주소(IP)
          'PORT': '3306',  # 데이터베이스 포트(보통은 330
          # 'OPTIONS': {
          #     'read_default_file': 'my.cnf',
          # },
      },
-    'default_': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+    # 'default_': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    # }
 }
 
 # Password validation
