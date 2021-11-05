@@ -11,7 +11,7 @@
 
 <div class="dataTables_paginate paging_simple_numbers" align="center" id="dataTable_paginate">
     <ul class="pagination">
-        <li class="paginate_button page-item previous {% if jcsg_content.pk >1 %} class="_read" {% endif %}" id="dataTable_previous">
+        <li class="paginate_button page-item previous {% if jcsg_content.pk == 1 %} disabled {% endif %}" id="dataTable_previous">
             <a href="{% url 'jcsg:jcsg_detail' pk=jcsg_content.pk|add:' -1' %}"
                aria-controls="dataTable"
                data-dt-idx="0" tabindex="0"
