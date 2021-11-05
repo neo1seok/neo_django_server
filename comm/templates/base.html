@@ -26,6 +26,12 @@
     </a>
 </li>
 <li class="nav-item">
+    <a class="nav-link" href="{% url 'jcsg:main'  %}">
+        <i class="fa fa-picture-o"></i>
+        <span>장씨세가소설</span>
+    </a>
+</li>
+<li class="nav-item">
     <a class="nav-link" href="{% url 'password:main'  %}">
         <i class="fa fa-key"></i>
         <span>패스워드</span>
@@ -45,6 +51,8 @@
         <span>개인링크</span>
     </a>
 </li>
+
+{{time_on_mars}}
 
 {% endblock%}
 

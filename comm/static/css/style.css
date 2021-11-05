@@ -20,6 +20,7 @@
     color: #828282;
 }
 
+
 .save {
     float: right;
 }
@@ -41,4 +42,8 @@
 
 .post h1 a, .post h1 a:visited {
     color: #000000;
+}
+
+._read {
+    color: #828282;
 }

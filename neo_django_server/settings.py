@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'health',
     'webtoon',
     'private_link',
+    'jcsg',
 
 
 
@@ -88,18 +89,18 @@ WSGI_APPLICATION = 'neo_django_server.wsgi.application'
 
 
 DATABASES = {
+    # 'default_': {
+    #     'ENGINE': 'django.db.backends.mysql',
+    #     'NAME': 'neo_django_server',  # DB명
+    #     'USER': 'neo1seok',  # 데이터베이스 계정
+    #     'PASSWORD': 'tofhdna1pi',  # 계정 비밀번호
+    #     'HOST': 'localhost',  # 데이테베이스 주소(IP)
+    #     'PORT': '3306',  # 데이터베이스 포트(보통은 330
+    #     # 'OPTIONS': {
+    #     #     'read_default_file': 'my.cnf',
+    #     # },
+    # },
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'neo_django_server',  # DB명
-        'USER': 'neo1seok',  # 데이터베이스 계정
-        'PASSWORD': 'tofhdna1pi',  # 계정 비밀번호
-        'HOST': 'localhost',  # 데이테베이스 주소(IP)
-        'PORT': '3306',  # 데이터베이스 포트(보통은 330
-        # 'OPTIONS': {
-        #     'read_default_file': 'my.cnf',
-        # },
-    },
-    'default_': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
@@ -142,6 +143,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+#STATIC_URL = '/static/'
+# Internationalization
+# https://docs.djangoproject.com/en/3.0/topics/i18n/
+STATICFILES_DIRS = [
+    BASE_DIR + "/comm/static",
+]
+
 
 LOGIN_URL = '/access/login/'
 LOGIN_REDIRECT_URL = "/"

@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="jcsg_novel">
+
+    <h3>{{ jcsg_content }}</h3>
+
+    <p>{{ jcsg_content.contents|linebreaksbr }}</p>
+    <!--    <a href="{% url 'jcsg:jcsg_detail' pk=jcsg_content.pk|add:'-1' %}"-->
+    <!--        class="btn btn-primary btn-icon-split">-->
+    <!--                                        <span class="icon text-white-50">-->
+    <!--                                            <i class="fas fa-flag"></i>-->
+    <!--                                        </span>-->
+    <!--                                        <span class="text">이전화</span>-->
+    <!--    </a>-->
+
+    <!--    <a href="{% url 'jcsg:jcsg_detail' pk=jcsg_content.pk|add:'1' %}"-->
+    <!--        class="btn btn-primary btn-icon-split">-->
+
+    <!--                                        <span class="text">다음화</span>-->
+    <!--                                        <span class="icon text-white-50">-->
+    <!--                                            <i class="fas fa-flag"></i>-->
+    <!--                                        </span>-->
+    <!--    </a>-->
+<div class="dataTables_paginate paging_simple_numbers" align="center" id="dataTable_paginate">
+    <ul class="pagination">
+        <li class="paginate_button page-item previous" id="dataTable_previous">
+            <a href="{% url 'jcsg:jcsg_detail' pk=jcsg_content.pk|add:' -1' %}"
+               aria-controls="dataTable"
+               data-dt-idx="0" tabindex="0"
+                class="page-link">이전화</a>
+        </li>
+        <li class="paginate_button page-item ">
+            <a href="{% url 'jcsg:main' %}"
+               aria-controls="dataTable" data-dt-idx="6" tabindex="0"
+                                                  class="page-link">목록으로가기</a>
+        </li>
+        <li class="paginate_button page-item next" id="dataTable_next">
+            <a href="{% url 'jcsg:jcsg_detail' pk=jcsg_content.pk|add:' -1' %}"
+               ria-controls="dataTable"
+               data-dt-idx="7" tabindex="0"class="page-link">다음화</a>
+        </li>
+    </ul>
+</div>
+
+</div>
+
+
+{% endblock%}
+

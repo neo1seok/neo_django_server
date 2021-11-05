@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+{% for jcsg_content in jcsg_contents %}
+
+         <div class="w3-card-4 _novel">
+
+            <header class="w3-container w3-light-grey _read">
+                <div >
+                <h3 >
+
+
+                    <a   {% if jcsg_content.status == "READ" %} class="_read" {% endif %}     href="{% url 'jcsg:jcsg_detail' pk=jcsg_content.pk %}">{{ jcsg_content }} </a ></h3>
+                     </div>
+
+
+            </header>
+
+            <div class="w3-container w3-bar">
+                <div class="w3-bar">
+
+                <div class="w3-bar-item">
+                    <p>{{ jcsg_content.date }}</p>
+                </div>
+
+                  <div class="w3-bar-item">
+                      {{ jcsg_content.contents|linebreaksbr|slice:"0:100" }}.....
+                  </div>
+<!--                  <div class="w3-bar-item">{{ jcsg_content.ptail|linebreaksbr }} </div>-->
+<!--                  <div class="w3-bar-item">(id : {{ jcsg_content.site_id|linebreaksbr }})</div>-->
+                </div>
+            </div>
+
+
+
+          </div>
+<br><br>
+
+    {% endfor %}
+
+{% endblock%}
+
