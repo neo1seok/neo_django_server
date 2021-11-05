@@ -10,10 +10,6 @@
     text-decoration: none;
 }
 
-.content {
-    margin-left: 40px;
-}
-
 
 
 .date {
@@ -47,7 +43,14 @@
 ._read {
     color: #828282;
 }
-.sidebar_,.navbar_{
-position:fixed;
+.sidebar,.navbar{
+ position: fixed;
+  padding-top: 32px;
+  top: -32px;
+
 }
 
+#content{
+ padding-left: 280px;
+ padding-top: 100px;
+}

@@ -1,5 +1,5 @@
 git+https://github.com/neo1seok/neolib_python.git
-git+https://bc33764f1e12497659057da4175884afece68be5@github.com/ictk-solution-dev/auth_comm_lib.git
+#git+https://bc33764f1e12497659057da4175884afece68be5@github.com/ictk-solution-dev/auth_comm_lib.git
 argparse-addons==0.7.0
 asgiref==3.4.1
 asn1==2.4.1
