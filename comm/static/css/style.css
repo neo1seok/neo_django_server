@@ -47,3 +47,7 @@
 ._read {
     color: #828282;
 }
+.sidebar_,.navbar_{
+position:fixed;
+}
+
