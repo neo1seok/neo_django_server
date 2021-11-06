@@ -24,8 +24,27 @@ class JcsgNovelView(BaseView,generic.ListView):
 		logger.debug(f"__name__:{__name__}")
 		type = self.request.GET.get('type', 'normal')
 		print(self.request, type)
-		return JcsgContents.objects.all() if type == 'all' else JcsgContents.objects.filter(
-			status=JcsgContents.Status.NOT_READ)
+
+		if type =='all':
+			return JcsgContents.objects.all()
+
+		if type =='conv':
+
+			return JcsgContents.objects.filter(
+				status=JcsgContents.Status.NOT_READ)[:10]
+
+			#return JcsgContents.objects.all()
+
+		else:
+			bf = list(JcsgContents.objects.filter(
+				status=JcsgContents.Status.READ))
+			logger.debug(f"cur :{bf}")
+			cur = list(JcsgContents.objects.filter(
+				status=JcsgContents.Status.NOT_READ))
+			logger.debug(f"cur :{cur}")
+			entry_list = list(cur)
+			return bf[-2:] + cur[:10]
+
 		
 		# return JcsgContents.objects.filter(
 		# 	status=JcsgContents.Status.NOT_READ)
