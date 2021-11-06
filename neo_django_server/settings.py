@@ -151,9 +151,10 @@ STATIC_URL = '/static/'
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 STATICFILES_DIRS = [
-    BASE_DIR + "/comm/static",
+    BASE_DIR + "/static",
 ]
-
+print("BASE_DIR",BASE_DIR)
+print("STATICFILES_DIRS",STATICFILES_DIRS)
 
 LOGIN_URL = '/access/login/'
 LOGIN_REDIRECT_URL = "/"
