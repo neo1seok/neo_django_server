@@ -35,9 +35,7 @@ temp_query('{% url 'jcsg:api'%}',data,ok_process=ok_process);
                     <a   {% if jcsg_content.status == "READ" %} class="_read" {% endif %}
                     href="{% url 'jcsg:jcsg_detail' pk=jcsg_content.pk %}">{{ jcsg_content }} </a >
                 </h3>
-                       <a href="#"   class="btn btn-primary btn-icon-split" onclick="cancel_read('{{jcsg_content.pk}}')">
-                       <span class="text">읽기취소</span>
-                </a>
+
                      </div>
 
 
@@ -53,6 +51,10 @@ temp_query('{% url 'jcsg:api'%}',data,ok_process=ok_process);
                   <div class="w3-bar-item">
                       {{ jcsg_content.contents|linebreaksbr|slice:"0:100" }}.....
                   </div>
+
+                      <a href="#"   class="" onclick="cancel_read('{{jcsg_content.pk}}')">
+                       <span class="text">읽기취소</span>
+                         </a>
 
 
 <!--                  <div class="w3-bar-item">{{ jcsg_content.ptail|linebreaksbr }} </div>-->
