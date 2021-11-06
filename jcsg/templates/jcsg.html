@@ -1,9 +1,25 @@
 {% extends 'base.html' %}
 {% load static %}
+{% block custom_js %}
+function cancel_read(pk){
+ok_process= (response) => {
+    console.log("ok",response);
+location.reload();
+
+}
+data = {
+    pk:pk,
+    cmd:'cancel_read',
+    'csrfmiddlewaretoken': '{{ csrf_token }}'
+}
+temp_query('{% url 'jcsg:api'%}',data,ok_process=ok_process);
+}
+{% endblock %}
 
 {% block on_load_js %}
 
 {% endblock %}
+
 
 {% block content %}
 
@@ -16,7 +32,12 @@
                 <h3 >
 
 
-                    <a   {% if jcsg_content.status == "READ" %} class="_read" {% endif %}     href="{% url 'jcsg:jcsg_detail' pk=jcsg_content.pk %}">{{ jcsg_content }} </a ></h3>
+                    <a   {% if jcsg_content.status == "READ" %} class="_read" {% endif %}
+                    href="{% url 'jcsg:jcsg_detail' pk=jcsg_content.pk %}">{{ jcsg_content }} </a >
+                </h3>
+                       <a href="#"   class="btn btn-primary btn-icon-split" onclick="cancel_read('{{jcsg_content.pk}}')">
+                       <span class="text">읽기취소</span>
+                </a>
                      </div>
 
 
@@ -32,6 +53,8 @@
                   <div class="w3-bar-item">
                       {{ jcsg_content.contents|linebreaksbr|slice:"0:100" }}.....
                   </div>
+
+
 <!--                  <div class="w3-bar-item">{{ jcsg_content.ptail|linebreaksbr }} </div>-->
 <!--                  <div class="w3-bar-item">(id : {{ jcsg_content.site_id|linebreaksbr }})</div>-->
                 </div>
@@ -49,7 +72,7 @@
             <span class="icon text-white-50">
                 <i class="fas fa-flag"></i>
             </span>
-            <span class="text">전체보기/span>
+            <span class="text">전체보기</span>
         </a>
 
 {% endblock%}

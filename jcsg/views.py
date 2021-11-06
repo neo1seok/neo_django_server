@@ -1,5 +1,6 @@
 import logging
 
+
 from django.shortcuts import render
 
 # Create your views here.
@@ -9,7 +10,7 @@ from comm.base_class import BaseView
 
 # MarsMixin 는 공통으로 사용할 view  중요한건 TemplateView 앞에 와야 한다는 거다.
 from jcsg.models import JcsgContents
-
+from django.http import HttpResponse, JsonResponse
 logger = logging.getLogger(__name__)
 
 class JcsgNovelView(BaseView,generic.ListView):
@@ -72,3 +73,31 @@ class JcsgNovelDetailView(BaseView,generic.DetailView):
 
 		context['exam'] = 'exam data'
 		return context
+
+
+
+
+class ApiView(generic.View):
+	def post(self, request):
+
+
+		#logger.debug(f"pk:{pk} cmd:{cmd}")
+		result = {'result': 'OK'}
+		try:
+			cmd = self.request.POST.get('cmd')
+			logger.debug(f"self.request.POST:{self.request.POST}")
+			getattr(self,'_'+cmd)(**self.request.POST)
+			pass
+		except Exception as ext:
+			result = {'result': 'FAIL', 'error': str(ext)}
+			pass
+
+		return JsonResponse(result)
+
+	def _cancel_read(self,**kwargs):
+
+		pk = kwargs.get('pk')[0]
+		logger.debug(f"_cancel_read pk:{pk}")
+		JcsgContents.objects.filter(pk=pk).update(status=JcsgContents.Status.NOT_READ)
+		ret ={}
+		return ret
