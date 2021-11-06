@@ -1,3 +1,6 @@
+import neo_django_server
+
+
 class BaseView(object):
 	time_on_mars = 5
 
@@ -13,4 +16,6 @@ class BaseView(object):
 	def get_context_data(self, **kwargs):
 		context = super(BaseView, self).get_context_data(**kwargs)
 		context['time_on_mars'] = self.get_time_on_mars()
+		context['version'] = neo_django_server.__version__
+
 		return context
