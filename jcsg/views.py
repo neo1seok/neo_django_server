@@ -1,3 +1,5 @@
+import logging
+
 from django.shortcuts import render
 
 # Create your views here.
@@ -8,6 +10,7 @@ from comm.base_class import BaseView
 # MarsMixin 는 공통으로 사용할 view  중요한건 TemplateView 앞에 와야 한다는 거다.
 from jcsg.models import JcsgContents
 
+logger = logging.getLogger(__name__)
 
 class JcsgNovelView(BaseView,generic.ListView):
 	template_name = 'jcsg.html'
@@ -17,7 +20,8 @@ class JcsgNovelView(BaseView,generic.ListView):
 	
 	
 	def get_queryset(self):
-		
+		print("__name__",__name__)
+		logger.debug(f"__name__:{__name__}")
 		type = self.request.GET.get('type', 'normal')
 		print(self.request, type)
 		return JcsgContents.objects.all() if type == 'all' else JcsgContents.objects.filter(

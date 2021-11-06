@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/3.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
-
+import logging
 import os
 from django.db.backends.mysql.base import DatabaseWrapper
 DatabaseWrapper.data_types['DateTimeField'] = 'datetime'
@@ -159,3 +159,48 @@ print("STATICFILES_DIRS",STATICFILES_DIRS)
 LOGIN_URL = '/access/login/'
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = '/'
+LOG_FILE = os.path.join(BASE_DIR,"logs" ,'server.log')
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
+            'datefmt': "%d/%b/%Y %H:%M:%S"
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': LOG_FILE,
+            'formatter': 'verbose',
+            'maxBytes': 1024 * 1024 * 10,
+            'backupCount': 5,
+        },
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file','console'],
+            'propagate': True,
+            'level': 'INFO',
+        },
+        'django.request': {
+            'handlers': ['file','console'],
+            'propagate': False,
+            'level': 'INFO',
+        },
+        'jcsg.views': {
+            'handlers': ['file','console'],
+            'level': 'DEBUG',
+        },
+
+    }
+}
