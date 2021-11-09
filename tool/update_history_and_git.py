@@ -13,7 +13,7 @@ class CurUpdateInitAndCommit(UpdateInitAndCommit):
 if __name__ == '__main__':
 	print(neolib)
 	msg = """
-first commit and adopt version
+update spin off
  
  
 
