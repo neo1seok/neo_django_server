@@ -37,12 +37,18 @@ class JcsgNovelView(BaseView,generic.ListView):
 			#return JcsgContents.objects.all()
 
 		else:
-			bf = list(JcsgContents.objects.filter(
-				status=JcsgContents.Status.READ))
-			logger.debug(f"cur :{bf}")
+
 			cur = list(JcsgContents.objects.filter(
 				status=JcsgContents.Status.NOT_READ))
 			logger.debug(f"cur :{cur}")
+
+
+
+			bf = list(JcsgContents.objects.filter(
+				status=JcsgContents.Status.READ ,id__lte =cur[0].pk))
+			logger.debug(f"cur :{bf}")
+
+
 			entry_list = list(cur)
 			return bf[-2:] + cur[:10]
 
