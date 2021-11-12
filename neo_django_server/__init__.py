@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*- 	
-__version__ = "1.0.5"
+__version__ = "1.0.7"
 """
 #[ver].[majer].[miner]
 #ver: 전체 프레임의 격변이 있을때
@@ -7,8 +7,22 @@ __version__ = "1.0.5"
 #miner:버그 수정및 작은 기능 추가.
 """
 __history__ = """
+* 1.0.7
+update spin off
+ 
+ 
+
+
+	
+* 1.0.6
+update spin off
+ 
+ 
+
+
+	
 * 1.0.5
-first commit and adopt version
+update spin off
  
  
 
