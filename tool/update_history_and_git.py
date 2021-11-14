@@ -13,7 +13,7 @@ class CurUpdateInitAndCommit(UpdateInitAndCommit):
 if __name__ == '__main__':
 	print(neolib)
 	msg = """
-update spin off
+update drf and oauth2
  
  
 
