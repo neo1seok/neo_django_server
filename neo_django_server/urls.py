@@ -13,15 +13,25 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
 from django.urls import path
 from django.urls import include, path
 from django.views.generic import RedirectView
+from rest_framework import generics, permissions, serializers,routers
 from rest_framework import urls
 
 
+from webtoon.views import WebtoonViewSet
+
+router = routers.DefaultRouter()
+router.register(r'webtoon', WebtoonViewSet)
+#router.register(r'letters', LetterViewSet)
+
 urlpatterns = [
+
     path('admin/', admin.site.urls),
+    path('api/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls')),
     path('', RedirectView.as_view(url='/main'),name='main'),
     #path('login/', RedirectView.as_view(url='/admin/login'),name='login'),

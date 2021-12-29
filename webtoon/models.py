@@ -30,7 +30,7 @@ class Webtoon(models.Model):
 	lastno = models.CharField(max_length=32)  # varchar(32)
 	dates = models.CharField(max_length=32)  # varchar(32)
 	status = models.CharField(max_length=20)  # varchar(20)
-
+	comment = models.TextField()  # varchar(20)
 	updt_date = models.DateTimeField(auto_now_add=True)
 	reg_date = models.DateTimeField(auto_now=True)
 

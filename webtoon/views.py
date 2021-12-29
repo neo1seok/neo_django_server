@@ -6,6 +6,10 @@ from django.views import generic
 from .forms import WebtoonForm
 from .models import Webtoon
 
+from rest_framework import generics, permissions, serializers,viewsets
+
+from .serializers import WebtoonSerializer
+
 
 def main_view(request):
 	return render(request, 'webtoon.html', {})
@@ -30,3 +34,11 @@ class WebtoonListView(generic.ListView):
 		# Add in a QuerySet of all the books
 		context['exam'] = 'exam data'
 		return context
+
+
+
+class WebtoonViewSet(viewsets.ModelViewSet):
+	#authentication_classes = [SessionAuthentication, BasicAuthentication]
+	permission_classes = [permissions.IsAdminUser,permissions.IsAuthenticated]
+	queryset = Webtoon.objects.all()
+	serializer_class = WebtoonSerializer
