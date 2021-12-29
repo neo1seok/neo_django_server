@@ -1,7 +1,9 @@
 import json
 import os
 
-from jcsg.models import JcsgContents
+from diary.models import DiaryContents
+
+DiaryContents
 from neolib import neoutil
 
 def run():

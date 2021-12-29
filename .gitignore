@@ -12,6 +12,7 @@ bin/
 *.user
 Log/
 log/
+app/
 *.db
 *.pdb
 *.zip

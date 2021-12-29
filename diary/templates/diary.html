@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block custom_js %}
+function cancel_read(pk){
+ok_process= (response) => {
+    console.log("ok",response);
+location.reload();
+
+}
+data = {
+    pk:pk,
+    cmd:'cancel_read',
+    'csrfmiddlewaretoken': '{{ csrf_token }}'
+}
+temp_query('{% url 'diary:api'%}',data,ok_process=ok_process);
+}
+{% endblock %}
+
+{% block on_load_js %}
+
+{% endblock %}
+
+
+{% block content %}
+
+{% for diary_content in diary_contents %}
+
+         <div class="w3-card-4 _novel">
+
+            <header class="w3-container w3-light-grey _read">
+                <div >
+                <h3 >
+
+
+                    <a   {% if diary_content.status == "READ" %} class="_read" {% endif %}
+                    href="{% url 'diary:diary_detail' pk=diary_content.pk %}">{{ diary_content }} </a >
+                </h3>
+
+                     </div>
+
+
+            </header>
+
+            <div class="w3-container w3-bar">
+                <div class="w3-bar">
+
+                <div class="w3-bar-item">
+                    <p>{{ diary_content.date_title }}</p>
+                </div>
+
+                  <div class="w3-bar-item">
+                      {{ diary_content.text|linebreaksbr|slice:"0:100" }}.....
+                  </div>
+
+                      <a href="#"   class="" onclick="cancel_read('{{diary_content.pk}}')">
+                          <br/>
+                       <span class="text">읽기취소</span>
+                         </a>
+
+
+<!--                  <div class="w3-bar-item">{{ diary_content.ptail|linebreaksbr }} </div>-->
+<!--                  <div class="w3-bar-item">(id : {{ diary_content.site_id|linebreaksbr }})</div>-->
+                </div>
+            </div>
+
+
+
+          </div>
+<br><br>
+
+    {% endfor %}
+
+        <a href="{% url 'jcsg:main' %}?type=all"
+           class="btn btn-primary btn-icon-split">
+            <span class="icon text-white-50">
+                <i class="fas fa-flag"></i>
+            </span>
+            <span class="text">전체보기</span>
+        </a>
+
+{% endblock%}
+
