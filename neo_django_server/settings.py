@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_extensions',
     'rest_framework',
-    'oauth2_provider',#python oauth2 설치 , admin 화면에  acces token 내용 추가 , migrate 를 해줘야 됨
+    #'oauth2_provider',#python oauth2 설치 , admin 화면에  acces token 내용 추가 , migrate 를 해줘야 됨
     'password',
     'access',
     'comm',
@@ -89,7 +89,7 @@ REST_FRAMEWORK_ = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+      #  'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
