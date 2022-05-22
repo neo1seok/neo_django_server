@@ -44,8 +44,9 @@ urlpatterns = [
     path('webtoon/', include(('webtoon.urls','webtoon'),namespace='webtoon')),
     path('private_link/', include(('private_link.urls','private_link'),namespace='private_link')),
     path('jcsg_novel/', include(('jcsg.urls','jcsg'),namespace='jcsg')),
-    path('diary/', include(('diary.urls','diary'),namespace='diary')),
-
+    # path('diary/', include(('diary.urls','diary'),namespace='diary')),
+    # path('words_puzzle/', include(('words_puzzle.urls','words_puzzle'),namespace='words_puzzle')),
+    #
 
 ]
 print('urlpatterns',urlpatterns)

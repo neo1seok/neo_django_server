@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('title', models.CharField(default=None, max_length=128)),
-                ('contents', models.TextField(default=None)),
+                ('desciption', models.TextField(default=None)),
                 ('date', models.DateTimeField(auto_now_add=True)),
                 ('status', models.CharField(choices=[('READ', 'Read'), ('NOT_READ', 'not read')], default='NOT_READ', max_length=20)),
                 ('updt_date', models.DateTimeField(auto_now_add=True)),

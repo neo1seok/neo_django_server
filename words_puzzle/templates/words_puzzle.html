@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<p> 워드 퍼즐</p>
+{% block content %}
+    <div class="password">
+
+            <a class="btn btn-default" href="{% url 'password:password_edit' pk=password.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
+
+        <h3>{{ password.site }}</h3>
+
+        <p>'{{ password.pheader|linebreaksbr }}' + '{{ password.ptail|linebreaksbr }}'</p>
+
+        <p>id : {{ password.site_id|linebreaksbr }}
+        기타 정보 : {{ password.etc|linebreaksbr }}</p>
+
+    </div>
+
+
+{% endblock %}
+{% endblock%}
