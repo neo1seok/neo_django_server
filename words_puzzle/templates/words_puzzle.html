@@ -1,37 +1,117 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block on_load_js %}
-$("#id_input_refword").on("click", function () {
-     ok_process= (response) => {
-        console.log("id_input_refword");
 
+{% block custom_js %}
+function click__vr_select() {
+    console.log("_vr_select",$(this).attr("rmword"));
+
+    ok_process= (response) => {
+        console.log("ok",response.ref_words);
+        $("#id_select").html("");
+        $('#id_refwords').text(response.ref_words);
 
     }
+
     data = {
-            'cmd':'input_refword',
-        ref_words:$('#id_ref_words').val(),
-        'csrfmiddlewaretoken': '{{ csrf_token }}'
+    'cmd':'remove_word',
+    remove_word:$(this).attr("rmword"),
+    'csrfmiddlewaretoken': '{{ csrf_token }}'
     }
+    console.log("data:",data);
+    temp_query('{% url 'words_puzzle:api'%}',data,ok_process=ok_process);
+
+}
+function get_session() {
+    console.log("_vr_select",$(this).attr("rmword"));
+
+    ok_process= (response) => {
+        console.log("ok",response.ref_words);
+        $('#id_refwords').text(response.ref_words);
+        $("#id_alert").text("search_word: "+response.enable_number)
+        $('#id_search_word').text(response.search_word)
+
+    }
+
+    data = {
+    'cmd':'get_session',
+    remove_word:$(this).attr("rmword"),
+    'csrfmiddlewaretoken': '{{ csrf_token }}'
+    }
+    console.log("data:",data);
+    temp_query('{% url 'words_puzzle:api'%}',data,ok_process=ok_process);
+
+}
+function candidate() {
+console.log("id_input_search");
+ok_process= (response) => {
+console.log("ok",response.candidate);
+    $("#id_select").html("");
+
+    for (const [key, value] of Object.entries(response.candidate)) {
+      console.log(key, value);
+     str_btn = "<button type='button' class='list-group-item list-group-item-action _vr_select' rmword ='{1}' >{0}</button>".format(key,value)
+        console.log(str_btn);
+
+        $("#id_select").append(str_btn)
+    }
+    $("._vr_select").on("click", click__vr_select);
+
+}
+
+data = {
+'cmd':'candidate',
+search_word:$('#id_search_word').text(),
+'csrfmiddlewaretoken': '{{ csrf_token }}'
+}
+console.log("data:",data);
+temp_query('{% url 'words_puzzle:api'%}',data,ok_process=ok_process);
+
+}
+{% endblock %}
+
+{% block on_load_js %}
+
+get_session();
+
+$("#id_input_refword").on("click", function () {
+ok_process= (response) => {
+console.log("id_input_refword");
+$('#id_refwords').text(response.ref_words);
+
+
+}
+data = {
+'cmd':'input_refword',
+ref_words:$('#id_input').val(),
+'csrfmiddlewaretoken': '{{ csrf_token }}'
+}
 temp_query('{% url 'words_puzzle:api'%}',data,ok_process=ok_process);
 });
 
 $("#id_input_search").on("click", function () {
-    console.log("id_input_search");
-    ok_process= (response) => {
-        console.log("ok",response);
-        //location.reload();
+console.log("id_input_search");
+ok_process= (response) => {
+console.log("ok",response);
+//location.reload();
+$("#id_alert").text("search_word: "+response.enable_number)
+$('#id_search_word').text(response.search_word)
 
-    }
-    data = {
-        'cmd':'input_search',
-        search_word:$('#id_search_word').val(),
-        'csrfmiddlewaretoken': '{{ csrf_token }}'
-    }
+
+}
+data = {
+'cmd':'input_search',
+search_word:$('#id_input').val(),
+'csrfmiddlewaretoken': '{{ csrf_token }}'
+}
 console.log("data:",data);
 temp_query('{% url 'words_puzzle:api'%}',data,ok_process=ok_process);
 
 });
+
+$("#id_candidate").on("click",candidate );
+
+
 
 {% endblock %}
 
@@ -45,15 +125,24 @@ temp_query('{% url 'words_puzzle:api'%}',data,ok_process=ok_process);
 
 
     <div class="mb-3">
-        <label for="id_ref_words" class="form-label">총 사용 단어</label>
-        <textarea class="form-control" id="id_ref_words" rows="3" placeholder="마쌍다라바지">출사중라자모불액취람체례무락하사이더바수행국증이</textarea>
+        <label for="id_input" class="form-label">총 사용 단어</label>
+        <textarea class="form-control" id="id_input" rows="3" placeholder="마쌍다라바지">*크*늬</textarea>
     </div>
-     <div class="col-auto">
+
+<!--    <div class="mb-3">-->
+<!--        <label for="id_search_word" class="form-label">검색단어</label>-->
+<!--        <input type="email" class="form-control" id="id_search_word" placeholder="**가*" value="*크*늬">-->
+<!--    </div>-->
+
+
+    <h2 id="id_refwords"></h2>
+    <h3 id="id_search_word"></h3>
+
+    <div class="alert alert-dark" role="alert" id="id_alert">
+
+    </div>
+    <div class="col-auto">
         <button type="submit" class="btn btn-primary mb-3" id="id_input_refword">후보단어 입력</button>
-    </div>
-    <div class="mb-3">
-        <label for="id_search_word" class="form-label">검색단어</label>
-        <input type="email" class="form-control" id="id_search_word" placeholder="**가*" value="*크*늬">
     </div>
     <div class="col-auto">
         <button type="submit" class="btn btn-primary mb-3" id="id_input_search">검색값 입력</button>
@@ -62,7 +151,15 @@ temp_query('{% url 'words_puzzle:api'%}',data,ok_process=ok_process);
         <button type="submit" class="btn btn-primary mb-3" id="id_candidate">가능 단어 추출</button>
     </div>
 
+    <div class="list-group" id="id_select">
+<!--        <button type="button" class="list-group-item list-group-item-action " aria-current="true">-->
+<!--            The current button-->
+<!--        </button>-->
+<!--        <button type="button" class="list-group-item list-group-item-action">A second button item</button>-->
+<!--        <button type="button" class="list-group-item list-group-item-action">A third button item</button>-->
+<!--        <button type="button" class="list-group-item list-group-item-action">A fourth button item</button>-->
 
+    </div>
 </div>
 
 

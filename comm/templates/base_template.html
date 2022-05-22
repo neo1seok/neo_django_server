@@ -57,7 +57,14 @@
 <script >
 const incomingToken = "{{ csrf_token }}";
 setCookie('csrf',incomingToken,1);
-
+String.prototype.format = function () {
+  var args = arguments;
+  return this.replace(/\{\{|\}\}|\{(\d+)\}/g, function (m, n) {
+    if (m == "{{") { return "{"; }
+    if (m == "}}") { return "}"; }
+    return args[n];
+  });
+};
 {% block custom_js %}
 {% endblock %}
 

@@ -1,0 +1,4 @@
+
+
+class CustomFail(ValueError):
+	pass
