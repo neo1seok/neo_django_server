@@ -44,28 +44,28 @@ function get_session() {
 }
 function candidate() {
 console.log("id_input_search");
-ok_process= (response) => {
-console.log("ok",response.candidate);
-    $("#id_select").html("");
+    ok_process= (response) => {
+    console.log("ok",response.candidate);
+        $("#id_select").html("");
 
-    for (const [key, value] of Object.entries(response.candidate)) {
-      console.log(key, value);
-     str_btn = "<button type='button' class='list-group-item list-group-item-action _vr_select' rmword ='{1}' >{0}</button>".format(key,value)
-        console.log(str_btn);
+        for (const [key, value] of Object.entries(response.candidate)) {
+          console.log(key, value);
+         str_btn = "<button type='button' class='list-group-item list-group-item-action _vr_select' rmword ='{1}' >{0}</button>".format(key,value)
+            console.log(str_btn);
 
-        $("#id_select").append(str_btn)
+            $("#id_select").append(str_btn)
+        }
+        $("._vr_select").on("click", click__vr_select);
+
     }
-    $("._vr_select").on("click", click__vr_select);
 
-}
-
-data = {
-'cmd':'candidate',
-search_word:$('#id_search_word').text(),
-'csrfmiddlewaretoken': '{{ csrf_token }}'
-}
-console.log("data:",data);
-temp_query('{% url 'words_puzzle:api'%}',data,ok_process=ok_process);
+    data = {
+    'cmd':'candidate',
+    search_word:$('#id_search_word').text(),
+    'csrfmiddlewaretoken': '{{ csrf_token }}'
+    }
+    console.log("data:",data);
+    temp_query('{% url 'words_puzzle:api'%}',data,ok_process=ok_process);
 
 }
 {% endblock %}
@@ -75,41 +75,47 @@ temp_query('{% url 'words_puzzle:api'%}',data,ok_process=ok_process);
 get_session();
 
 $("#id_input_refword").on("click", function () {
-ok_process= (response) => {
-console.log("id_input_refword");
-$('#id_refwords').text(response.ref_words);
+    ok_process= (response) => {
+    console.log("id_input_refword");
+    $('#id_refwords').text(response.ref_words);
 
 
-}
-data = {
-'cmd':'input_refword',
-ref_words:$('#id_input').val(),
-'csrfmiddlewaretoken': '{{ csrf_token }}'
-}
-temp_query('{% url 'words_puzzle:api'%}',data,ok_process=ok_process);
+    }
+    data = {
+    'cmd':'input_refword',
+    ref_words:$('#id_input').val(),
+    'csrfmiddlewaretoken': '{{ csrf_token }}'
+    }
+    temp_query('{% url 'words_puzzle:api'%}',data,ok_process=ok_process);
 });
 
 $("#id_input_search").on("click", function () {
-console.log("id_input_search");
-ok_process= (response) => {
-console.log("ok",response);
-//location.reload();
-$("#id_alert").text("search_word: "+response.enable_number)
-$('#id_search_word').text(response.search_word)
+    console.log("id_input_search");
+    ok_process= (response) => {
+    console.log("ok",response);
+    //location.reload();
+    $("#id_alert").text("search_word: "+response.enable_number)
+    $('#id_search_word').text(response.search_word)
 
 
-}
-data = {
-'cmd':'input_search',
-search_word:$('#id_input').val(),
-'csrfmiddlewaretoken': '{{ csrf_token }}'
-}
-console.log("data:",data);
-temp_query('{% url 'words_puzzle:api'%}',data,ok_process=ok_process);
+    }
+    data = {
+    'cmd':'input_search',
+    search_word:$('#id_input').val(),
+    'csrfmiddlewaretoken': '{{ csrf_token }}'
+    }
+    console.log("data:",data);
+    temp_query('{% url 'words_puzzle:api'%}',data,ok_process=ok_process);
 
 });
 
 $("#id_candidate").on("click",candidate );
+
+$("#id_astrik").on("click", function () {
+
+    con = $('#id_input').val()
+    $('#id_input').val(con+'*')
+} );
 
 
 
@@ -123,11 +129,44 @@ $("#id_candidate").on("click",candidate );
 
     <h3>워드퍼즐 도우미</h3>
 
+    <label for="id_input" class="form-label">총 사용 단어</label>
+    <div class="mb-3 row">
 
-    <div class="mb-3">
-        <label for="id_input" class="form-label">총 사용 단어</label>
-        <textarea class="form-control" id="id_input" rows="3" placeholder="마쌍다라바지">*크*늬</textarea>
+
+        <div class="col">
+            <textarea class="form-control" id="id_input" rows="3" placeholder="마쌍다라바지">*크*늬</textarea>
+        </div>
+        <div class="col-auto col">
+            <button type="submit" class="btn btn-primary mb-3" id="id_astrik">*</button>
+        </div>
+
     </div>
+
+<h2 id="id_refwords"></h2>
+<h3 id="id_search_word"></h3>
+
+<div class="alert alert-dark" role="alert" id="id_alert"></div>
+<div class="col-auto">
+    <button type="submit" class="btn btn-primary mb-3" id="id_input_refword">후보단어 입력</button>
+</div>
+<div class="col-auto">
+    <button type="submit" class="btn btn-primary mb-3" id="id_input_search">검색값 입력</button>
+</div>
+<div class="col-auto">
+    <button type="submit" class="btn btn-primary mb-3" id="id_candidate">가능 단어 추출</button>
+</div>
+
+<div class="list-group" id="id_select">
+    <!--        <button type="button" class="list-group-item list-group-item-action " aria-current="true">-->
+    <!--            The current button-->
+    <!--        </button>-->
+    <!--        <button type="button" class="list-group-item list-group-item-action">A second button item</button>-->
+    <!--        <button type="button" class="list-group-item list-group-item-action">A third button item</button>-->
+    <!--        <button type="button" class="list-group-item list-group-item-action">A fourth button item</button>-->
+
+</div>
+
+</div>
 
 <!--    <div class="mb-3">-->
 <!--        <label for="id_search_word" class="form-label">검색단어</label>-->
@@ -135,31 +174,6 @@ $("#id_candidate").on("click",candidate );
 <!--    </div>-->
 
 
-    <h2 id="id_refwords"></h2>
-    <h3 id="id_search_word"></h3>
-
-    <div class="alert alert-dark" role="alert" id="id_alert">
-
-    </div>
-    <div class="col-auto">
-        <button type="submit" class="btn btn-primary mb-3" id="id_input_refword">후보단어 입력</button>
-    </div>
-    <div class="col-auto">
-        <button type="submit" class="btn btn-primary mb-3" id="id_input_search">검색값 입력</button>
-    </div>
-    <div class="col-auto">
-        <button type="submit" class="btn btn-primary mb-3" id="id_candidate">가능 단어 추출</button>
-    </div>
-
-    <div class="list-group" id="id_select">
-<!--        <button type="button" class="list-group-item list-group-item-action " aria-current="true">-->
-<!--            The current button-->
-<!--        </button>-->
-<!--        <button type="button" class="list-group-item list-group-item-action">A second button item</button>-->
-<!--        <button type="button" class="list-group-item list-group-item-action">A third button item</button>-->
-<!--        <button type="button" class="list-group-item list-group-item-action">A fourth button item</button>-->
-
-    </div>
 </div>
 
 
