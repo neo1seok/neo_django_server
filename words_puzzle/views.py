@@ -16,6 +16,9 @@ from comm.base_class import BaseView
 
 
 from django.http import HttpResponse, JsonResponse
+
+from words_puzzle.words_functions import calc_all_nums
+
 logger = logging.getLogger(__name__)
 
 
@@ -32,18 +35,13 @@ class MainView(BaseView, generic.TemplateView):
 
 		return ret
 
-	# def get_context_data(self, **kwargs):
-	# 	# Call the base implementation first to get a context
-	# 	context = super().get_context_data(**kwargs)
-	# 	# Add in a QuerySet of all the books
-	# 	print("MainView get_context_data pk", self.kwargs)
-	#
-	# 	pk = self.kwargs.get('pk')
-	# 	JcsgContents.objects.filter(pk=pk).update(status=JcsgContents.Status.READ)
-	# 	# JcsgContents.objects.get(pk).update(status = JcsgContents.Status.READ)
-	#
-	# 	context['exam'] = 'exam data'
-	# 	return context
+	def get_context_data(self, **kwargs):
+		# Call the base implementation first to get a context
+		context = super().get_context_data(**kwargs)
+
+
+		context['exam'] = 'exam data'
+		return context
 
 
 class ApiView(generic.View):
@@ -51,21 +49,39 @@ class ApiView(generic.View):
 
 		# logger.debug(f"pk:{pk} cmd:{cmd}")
 		result = {'result': 'OK'}
-		try:
-			cmd = self.request.POST.get('cmd')
-			logger.debug(f"self.request.POST:{self.request.POST}")
-			getattr(self, '_' + cmd)(**self.request.POST)
-			pass
-		except Exception as ext:
-			result = {'result': 'FAIL', 'error': str(ext)}
-			pass
+		#try:
+		cmd = self.request.POST.get('cmd')
+		print("ApiView post", self.request.POST,cmd)
+		logger.debug(f"self.request.POST:{self.request.POST}")
+		ret = getattr(self, '_' + cmd)(self.request.POST)
+		result.update(ret)
+		#	pass
+		#except Exception as ext:
+		#	print(ext)
+
+		#	result = {'result': 'FAIL', 'error': str(ext)}
+		#	pass
 
 		return JsonResponse(result)
 
-	# def _cancel_read(self, **kwargs):
-	#
-	# 	pk = kwargs.get('pk')[0]
-	# 	logger.debug(f"_cancel_read pk:{pk}")
-	# 	JcsgContents.objects.filter(pk=pk).update(status=JcsgContents.Status.NOT_READ)
-	# 	ret = {}
-	# 	return ret
+	def _input_refword(self, post):
+		logger.debug(f"_input_search")
+		str_ref_words = post.get("ref_words")
+
+		self.request.session['ref_words'] = str_ref_words
+		print(self.request.session)
+		ret = {}
+		return ret
+
+	def _input_search(self, post):
+		print(self.request.session)
+		search_word = post.get("search_word")
+		ref_words = self.request.session.get('ref_words')
+		print('self.request.session',search_word,ref_words)
+		logger.debug(f"_input_search")
+		enable_number = calc_all_nums(search_word,ref_words)
+		self.request.session['search_word'] = search_word
+		self.request.session['enable_number'] = enable_number
+		ret = {"enable_number":enable_number}
+		return ret
+

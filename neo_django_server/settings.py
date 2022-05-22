@@ -50,8 +50,8 @@ INSTALLED_APPS = [
     'webtoon',
     'private_link',
     'jcsg',
-    # 'diary',
-    # 'words_puzzle'
+    'diary',
+    'words_puzzle'
 
 
 

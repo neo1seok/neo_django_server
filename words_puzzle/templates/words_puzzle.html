@@ -1,22 +1,70 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block on_load_js %}
+$("#id_input_refword").on("click", function () {
+     ok_process= (response) => {
+        console.log("id_input_refword");
+
+
+    }
+    data = {
+            'cmd':'input_refword',
+        ref_words:$('#id_ref_words').val(),
+        'csrfmiddlewaretoken': '{{ csrf_token }}'
+    }
+temp_query('{% url 'words_puzzle:api'%}',data,ok_process=ok_process);
+});
+
+$("#id_input_search").on("click", function () {
+    console.log("id_input_search");
+    ok_process= (response) => {
+        console.log("ok",response);
+        //location.reload();
+
+    }
+    data = {
+        'cmd':'input_search',
+        search_word:$('#id_search_word').val(),
+        'csrfmiddlewaretoken': '{{ csrf_token }}'
+    }
+console.log("data:",data);
+temp_query('{% url 'words_puzzle:api'%}',data,ok_process=ok_process);
+
+});
+
+{% endblock %}
+
 {% block content %}
-<p> 워드 퍼즐</p>
-{% block content %}
-    <div class="password">
 
-            <a class="btn btn-default" href="{% url 'password:password_edit' pk=password.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
+<div class="word">
 
-        <h3>{{ password.site }}</h3>
+    <a class="btn btn-default" href="#"><span class="glyphicon glyphicon-pencil"></span></a>
 
-        <p>'{{ password.pheader|linebreaksbr }}' + '{{ password.ptail|linebreaksbr }}'</p>
+    <h3>워드퍼즐 도우미</h3>
 
-        <p>id : {{ password.site_id|linebreaksbr }}
-        기타 정보 : {{ password.etc|linebreaksbr }}</p>
 
+    <div class="mb-3">
+        <label for="id_ref_words" class="form-label">총 사용 단어</label>
+        <textarea class="form-control" id="id_ref_words" rows="3" placeholder="마쌍다라바지">출사중라자모불액취람체례무락하사이더바수행국증이</textarea>
+    </div>
+     <div class="col-auto">
+        <button type="submit" class="btn btn-primary mb-3" id="id_input_refword">후보단어 입력</button>
+    </div>
+    <div class="mb-3">
+        <label for="id_search_word" class="form-label">검색단어</label>
+        <input type="email" class="form-control" id="id_search_word" placeholder="**가*" value="*크*늬">
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-primary mb-3" id="id_input_search">검색값 입력</button>
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-primary mb-3" id="id_candidate">가능 단어 추출</button>
     </div>
 
 
-{% endblock %}
+</div>
+
+
+
 {% endblock%}
