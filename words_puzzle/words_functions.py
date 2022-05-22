@@ -2,7 +2,7 @@
 from itertools import permutations
 from neolib import neoutil
 from collections import Counter
-from study_test.words_check.parse_csv import get_list_words
+
 
 def parse_fmt(fmt):
 	print(fmt)
