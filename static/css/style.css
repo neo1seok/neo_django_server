@@ -50,6 +50,13 @@
 
 }
 
+
+.footer {
+  height: 100px;
+  margin-top: -100px;
+
+}
+
 #content_{
  padding-left: 280px;
  padding-top: 100px;

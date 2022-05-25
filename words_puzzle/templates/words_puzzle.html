@@ -3,6 +3,11 @@
 
 
 {% block custom_js %}
+function fail_process2(response) {
+    console.log("fail_process2",response);
+
+    $('#id_alert').text(response.error);
+}
 function click__vr_select() {
     console.log("_vr_select",$(this).attr("rmword"));
 
@@ -19,7 +24,7 @@ function click__vr_select() {
     'csrfmiddlewaretoken': '{{ csrf_token }}'
     }
     console.log("data:",data);
-    temp_query('{% url 'words_puzzle:api'%}',data,ok_process=ok_process);
+    temp_query('{% url 'words_puzzle:api'%}',data,ok_process=ok_process,headers={},fail_process=fail_process2);
 
 }
 function get_session() {
@@ -28,7 +33,7 @@ function get_session() {
     ok_process= (response) => {
         console.log("ok",response.ref_words);
         $('#id_refwords').text(response.ref_words);
-        $("#id_alert").text("search_word: "+response.enable_number)
+        $("#id_msg").text("search_word: "+response.enable_number)
         $('#id_search_word').text(response.search_word)
 
     }
@@ -39,13 +44,16 @@ function get_session() {
     'csrfmiddlewaretoken': '{{ csrf_token }}'
     }
     console.log("data:",data);
-    temp_query('{% url 'words_puzzle:api'%}',data,ok_process=ok_process);
+    temp_query('{% url 'words_puzzle:api'%}',data,ok_process=ok_process,headers={},fail_process=fail_process2);
 
 }
 function candidate() {
-console.log("id_input_search");
+console.log("candidate");
     ok_process= (response) => {
     console.log("ok",response.candidate);
+        $("#id_msg").text("search_word: "+response.enable_number)
+        $('#id_search_word').text(response.search_word)
+
         $("#id_select").html("");
 
         for (const [key, value] of Object.entries(response.candidate)) {
@@ -56,16 +64,17 @@ console.log("id_input_search");
             $("#id_select").append(str_btn)
         }
         $("._vr_select").on("click", click__vr_select);
+        $('#id_input').val("");
 
     }
 
     data = {
     'cmd':'candidate',
-    search_word:$('#id_search_word').text(),
+    search_word:$('#id_input').val(),
     'csrfmiddlewaretoken': '{{ csrf_token }}'
     }
     console.log("data:",data);
-    temp_query('{% url 'words_puzzle:api'%}',data,ok_process=ok_process);
+    temp_query('{% url 'words_puzzle:api'%}',data,ok_process=ok_process,headers={},fail_process=fail_process2);
 
 }
 {% endblock %}
@@ -75,26 +84,61 @@ console.log("id_input_search");
 get_session();
 
 $("#id_input_refword").on("click", function () {
+
+
+
     ok_process= (response) => {
-    console.log("id_input_refword");
-    $('#id_refwords').text(response.ref_words);
+        console.log("id_input_refword");
+        $('#id_refwords').text(response.ref_words);
+        $('#id_input').val("");
+        $('#id_alert').text("");
 
 
     }
-    data = {
-    'cmd':'input_refword',
-    ref_words:$('#id_input').val(),
-    'csrfmiddlewaretoken': '{{ csrf_token }}'
-    }
-    temp_query('{% url 'words_puzzle:api'%}',data,ok_process=ok_process);
+       data = {
+            'cmd':'input_refword',
+            ref_words:$('#id_input').val(),
+            'csrfmiddlewaretoken': '{{ csrf_token }}'
+            }
+         temp_query('{% url 'words_puzzle:api'%}',data,ok_process=ok_process,headers={},fail_process=fail_process2);
+
+
+     navigator.clipboard.readText()
+        .then((ref_words) => {
+        console.log("Text clipboard copied to ...",content)
+
+    })
+        .catch(err => {
+        console.log('Something went wrong', err);
+    })
+
+
 });
+$("#id_clipboard").on("click", function () {
 
+
+
+
+
+     navigator.clipboard.readText()
+        .then((ref_words) => {
+        console.log("Text clipboard copied to ...",content)
+        $('#id_input').val(ref_words);
+
+    })
+        .catch(err => {
+        console.log('Something went wrong', err);
+    })
+
+
+});
 $("#id_input_search").on("click", function () {
     console.log("id_input_search");
     ok_process= (response) => {
     console.log("ok",response);
     //location.reload();
-    $("#id_alert").text("search_word: "+response.enable_number)
+    $("#id_msg").text("search_word: "+response.enable_number)
+    $('#id_alert').text("");
     $('#id_search_word').text(response.search_word)
 
 
@@ -105,16 +149,34 @@ $("#id_input_search").on("click", function () {
     'csrfmiddlewaretoken': '{{ csrf_token }}'
     }
     console.log("data:",data);
-    temp_query('{% url 'words_puzzle:api'%}',data,ok_process=ok_process);
+    temp_query('{% url 'words_puzzle:api'%}',data,ok_process=ok_process,headers={},fail_process=fail_process2);
 
 });
+$("#id_get_refword").on("click", function () {
+    console.log("id_input_search");
+    ok_process= (response) => {
+        console.log("ok",response);
+        //location.reload();
+        $('#id_input').val(response.ref_words)
 
+
+    }
+    data = {
+    'cmd':'get_refword',
+    'csrfmiddlewaretoken': '{{ csrf_token }}'
+    }
+    console.log("data:",data);
+    temp_query('{% url 'words_puzzle:api'%}',data,ok_process=ok_process,headers={},fail_process=fail_process2);
+
+});
 $("#id_candidate").on("click",candidate );
 
 $("#id_astrik").on("click", function () {
 
     con = $('#id_input').val()
     $('#id_input').val(con+'*')
+
+    document.getElementById("id_input").focus();
 } );
 
 
@@ -130,52 +192,60 @@ $("#id_astrik").on("click", function () {
     <h3>워드퍼즐 도우미</h3>
 
     <label for="id_input" class="form-label">총 사용 단어</label>
-    <div class="row">
 
-
-        <div class="col">
-            <textarea class="form-control" id="id_input" rows="3" placeholder="마쌍다라바지">*크*늬</textarea>
-        </div>
-        <div class="col-auto col">
-            <button type="submit" class="btn btn-primary mb-3" id="id_astrik">*</button>
-        </div>
-
-    </div>
 
 <h2 id="id_refwords"></h2>
 <h3 id="id_search_word"></h3>
 
-<div class="alert alert-dark" role="alert" id="id_alert"></div>
-<div class="col-auto">
-    <button type="submit" class="btn btn-primary mb-3" id="id_input_refword">후보단어 입력</button>
-</div>
-<div class="col-auto">
-    <button type="submit" class="btn btn-primary mb-3" id="id_input_search">검색값 입력</button>
-</div>
-<div class="col-auto">
-    <button type="submit" class="btn btn-primary mb-3" id="id_candidate">가능 단어 추출</button>
-</div>
+<div class="alert alert-dark" role="alert" id="id_msg"></div>
 
-<div class="list-group" id="id_select">
-    <!--        <button type="button" class="list-group-item list-group-item-action " aria-current="true">-->
-    <!--            The current button-->
-    <!--        </button>-->
-    <!--        <button type="button" class="list-group-item list-group-item-action">A second button item</button>-->
-    <!--        <button type="button" class="list-group-item list-group-item-action">A third button item</button>-->
-    <!--        <button type="button" class="list-group-item list-group-item-action">A fourth button item</button>-->
+<div class="alert alert-danger" role="alert" id="id_alert">
 
 </div>
+<div class="card" style="width: 18rem;">
+  <ul class="list-group list-group-flush" id="id_select">
+<!--    <li class="list-group-item">An item</li>-->
+<!--    <li class="list-group-item">A second item</li>-->
+<!--    <li class="list-group-item">A third item</li>-->
+  </ul>
+</div>
+
+</br>
+    <!--    <div class="mb-3">-->
+    <!--        <label for="id_search_word" class="form-label">검색단어</label>-->
+    <!--        <input type="email" class="form-control" id="id_search_word" placeholder="**가*" value="*크*늬">-->
+    <!--    </div>-->
+    <div class="row">
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary mb-3" id="id_clipboard">클립보드복사</button>
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary mb-3" id="id_input_refword">후보단어</button>
+        </div>
+           <div class="col-auto">
+            <button type="submit" class="btn btn-primary mb-3" id="id_get_refword">후보단어 가져오기</button>
+        </div>
+
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary mb-3" id="id_input_search">총가지수</button>
+        </div>
+
+    </div>
+    <div class="row ">
 
 
+        <div class="col ">
+            <textarea class="form-control" id="id_input" rows="3" placeholder="예) **다**"></textarea>
+        </div>
+        <div class="col-auto col">
+            <button type="submit" class="btn btn-primary mb-3" id="id_astrik">*</button>
+            </br>
+            <button type="submit" class="btn btn-primary mb-3" id="id_candidate">입력</button>
+        </div>
 
-<!--    <div class="mb-3">-->
-<!--        <label for="id_search_word" class="form-label">검색단어</label>-->
-<!--        <input type="email" class="form-control" id="id_search_word" placeholder="**가*" value="*크*늬">-->
-<!--    </div>-->
+    </div>
 
 
 </div>
-
-
 
 {% endblock%}

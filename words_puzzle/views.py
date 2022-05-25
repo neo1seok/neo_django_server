@@ -77,9 +77,28 @@ class ApiView(generic.View):
 		       "search_word": search_word, "enable_number": enable_number
 		       }
 		return ret
+
+	#id_get_refword
+	def _get_refword(self, post):
+
+		ref_words = self.request.session['ref_words']
+		print(self.request.session)
+		ret = {"ref_words":ref_words}
+		return ret
+
 	def _input_refword(self, post):
 		logger.debug(f"_input_search")
 		str_ref_words = post.get("ref_words")
+		if not str_ref_words:
+
+			raise CustomFail(f"빈단어가 입력 되었습니다.")
+		import re
+		str_ref_words = str_ref_words.strip()
+		remain = re.sub(r"[가-힣]+","",str_ref_words)
+
+		if not str_ref_words or remain :
+
+			raise CustomFail(f"{str_ref_words}:\n후보단어는 한글만 입력 가능 합니다.")
 
 		self.request.session['ref_words'] = str_ref_words
 		print(self.request.session)
@@ -101,8 +120,10 @@ class ApiView(generic.View):
 	def _candidate(self,post):
 
 		search_word = post.get("search_word")
-
-		search_word = self.request.session.get('search_word')
+		ref_words = self.request.session.get('ref_words')
+		enable_number = calc_all_nums(search_word, ref_words)
+		print("search_word",search_word)
+		#search_word = self.request.session.get('search_word')
 		ref_words = self.request.session.get('ref_words')
 		if not ref_words:
 			raise CustomFail("후보단어 설정이 안되었습니다.")
@@ -116,7 +137,7 @@ class ApiView(generic.View):
 		list_obj = WordsContents.objects.filter(word__in=list(words.keys()))
 		candidate ={tmp.word:words[tmp.word] for tmp in list_obj}
 		self.request.session["candidate"] = candidate
-		ret = {"candidate":candidate}
+		ret = {"candidate":candidate,"enable_number":enable_number,"search_word":search_word,}
 		return ret
 
 	def _remove_word(self,post):
