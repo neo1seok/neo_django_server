@@ -58,7 +58,7 @@ console.log("candidate");
 
         for (const [key, value] of Object.entries(response.candidate)) {
           console.log(key, value);
-         str_btn = "<button type='button' class='list-group-item list-group-item-action _vr_select' rmword ='{1}' >{0}</button>".format(key,value)
+         str_btn = "<button type='button' class='list-group-item list-group-item-action _vr_select' rmword='{1}'    >{0}</button>".format(key,value)
             console.log(str_btn);
 
             $("#id_select").append(str_btn)
@@ -77,6 +77,27 @@ console.log("candidate");
     temp_query('{% url 'words_puzzle:api'%}',data,ok_process=ok_process,headers={},fail_process=fail_process2);
 
 }
+function validImageType(image) {
+  const result = ([ 'image/jpeg',
+                    'image/png',
+                    'image/jpg' ].indexOf(image.type) > -1);
+  return result;
+}
+function setThumbnail(event) {
+    for (var image of event.target.files) {
+      var reader = new FileReader();
+
+      reader.onload = function(event) {
+        var img = document.createElement("img");
+        img.setAttribute("src", event.target.result);
+        document.querySelector("div#image_container").appendChild(img);
+      };
+
+      console.log(image);
+      reader.readAsDataURL(image);
+    }
+}
+
 {% endblock %}
 
 {% block on_load_js %}
@@ -118,12 +139,13 @@ $("#id_clipboard").on("click", function () {
 
 
 
-
-
+    //$('#id_input').select();
+    document.getElementById("id_input").focus();
+     document.execCommand("Paste", null, null);
      navigator.clipboard.readText()
         .then((ref_words) => {
         console.log("Text clipboard copied to ...",content)
-        $('#id_input').val(ref_words);
+      //  $('#id_input').val(ref_words);
 
     })
         .catch(err => {
@@ -180,6 +202,41 @@ $("#id_astrik").on("click", function () {
 } );
 
 
+$('#id_input_upload').on("change", (evt) => {
+  const image = evt.target.files[0];
+    console.log("image",image)
+  if(!validImageType(image)) {
+    console.warn("invalide image file type");
+    return;
+  }
+
+     var reader = new FileReader();
+
+      reader.onload = function(event) {
+        //var img = document.createElement("img");
+        //img.setAttribute("src", event.target.result);
+        //document.querySelector("div#image_container").appendChild(img);
+        $('#image_container').html("<img src='{0}'>".format(event.target.result))
+      };
+
+      console.log(image);
+      reader.readAsDataURL(image);
+
+    //setThumbnail(evt);
+})
+
+
+$("#id_clear").on("click", function () {
+
+      console.log("id_input_search");
+
+    $('#image_container').html("");
+    $('#id_input').val("");
+
+
+} );
+
+
 
 {% endblock %}
 
@@ -215,13 +272,34 @@ $("#id_astrik").on("click", function () {
     <!--        <label for="id_search_word" class="form-label">검색단어</label>-->
     <!--        <input type="email" class="form-control" id="id_search_word" placeholder="**가*" value="*크*늬">-->
     <!--    </div>-->
-    <div class="row">
+
+    <div id="image_container" width="100%"></div>
+    <div class="row ">
+
+
+
+            <textarea class="form-control" id="id_input" rows="3" placeholder="예) **다**"></textarea>
+
+
+
+    </div>
+
+   <div class="row  _cls_input">
+
+       <div class="col-auto col">
+       <button type="submit" class="btn btn-primary mb-3" id="id_astrik">*</button>
+       </div>
+       <div class="col-auto col">
+           <button type="submit" class="btn btn-primary mb-3" id="id_candidate">입력</button>
+        </div>
+
+
+    </div>
+       <div class="row">
         <div class="col-auto">
             <button type="submit" class="btn btn-primary mb-3" id="id_clipboard">클립보드복사</button>
         </div>
-        <div class="col-auto">
-            <button type="submit" class="btn btn-primary mb-3" id="id_input_refword">후보단어</button>
-        </div>
+
            <div class="col-auto">
             <button type="submit" class="btn btn-primary mb-3" id="id_get_refword">후보단어 가져오기</button>
         </div>
@@ -230,20 +308,23 @@ $("#id_astrik").on("click", function () {
             <button type="submit" class="btn btn-primary mb-3" id="id_input_search">총가지수</button>
         </div>
 
-    </div>
-    <div class="row ">
-
-
-        <div class="col ">
-            <textarea class="form-control" id="id_input" rows="3" placeholder="예) **다**"></textarea>
-        </div>
-        <div class="col-auto col">
-            <button type="submit" class="btn btn-primary mb-3" id="id_astrik">*</button>
-            </br>
-            <button type="submit" class="btn btn-primary mb-3" id="id_candidate">입력</button>
+          <div class="col-auto col ">
+        <button type="submit" class="btn btn-primary mb-3" id="id_input_refword">후보단어</button>
         </div>
 
+
     </div>
+
+     <div class="row ">
+          <div class="col-auto col">
+            <input type="file"  class="btn btn-primary mb-3 "name="file" id="id_input_upload" accept="image/*">
+        </div>
+           <div class="col-auto col">
+               <button type="submit" class="btn btn-primary mb-3" id="id_clear">비우기</button>
+
+        </div>
+     </div>
+
 
 
 </div>

@@ -57,6 +57,10 @@
 
 }
 
+._cls_input{
+
+float: right;
+}
 #content_{
  padding-left: 280px;
  padding-top: 100px;
