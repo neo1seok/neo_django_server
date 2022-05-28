@@ -61,6 +61,12 @@
 
 float: right;
 }
+
+div img{
+
+width:100%
+}
+
 #content_{
  padding-left: 280px;
  padding-top: 100px;
