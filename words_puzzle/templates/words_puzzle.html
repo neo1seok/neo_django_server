@@ -1,13 +1,43 @@
 {% extends 'base.html' %}
 {% load static %}
 
-
+var is_toggle = false;
 {% block custom_js %}
-function fail_process2(response) {
-    console.log("fail_process2",response);
+function LoadingWithMask() {
+    console.log("LoadingWithMask");
 
-    $('#id_alert').text(response.error);
+    $('#id_loading').show();
+
 }
+
+function closeLoadingWithMask() {
+    console.log("closeLoadingWithMask");
+    $('#id_loading').hide();
+}
+
+function temp_query_cust(url,data,ok_process){
+
+    LoadingWithMask();
+    console.log("temp_query_cust",ok_process);
+    ok_process_cust= (response) => {
+        console.log("ok_process_cust");
+        console.log("ok_process_cust",ok_process);
+        closeLoadingWithMask();
+        console.log("ok_process st");
+        ok_process(response);
+        console.log("ok_process end");
+    }
+    function fail_process_cust(response) {
+        closeLoadingWithMask();
+        console.log("fail_process2",response);
+
+        $('#id_alert').text(response.error);
+    }
+
+    temp_query('{% url 'words_puzzle:api'%}',data,ok_process_cust,{},fail_process_cust);
+}
+
+
 function click__vr_select() {
     console.log("_vr_select",$(this).attr("rmword"));
 
@@ -24,7 +54,9 @@ function click__vr_select() {
     'csrfmiddlewaretoken': '{{ csrf_token }}'
     }
     console.log("data:",data);
-    temp_query('{% url 'words_puzzle:api'%}',data,ok_process=ok_process,headers={},fail_process=fail_process2);
+
+    temp_query_cust('{% url 'words_puzzle:api'%}',data,ok_process);
+    //temp_query('{% url 'words_puzzle:api'%}',data,ok_process=ok_process,headers={},fail_process=fail_process2);
 
 }
 function get_session() {
@@ -44,7 +76,8 @@ function get_session() {
     'csrfmiddlewaretoken': '{{ csrf_token }}'
     }
     console.log("data:",data);
-    temp_query('{% url 'words_puzzle:api'%}',data,ok_process=ok_process,headers={},fail_process=fail_process2);
+    temp_query_cust('{% url 'words_puzzle:api'%}',data,ok_process);
+    //temp_query('{% url 'words_puzzle:api'%}',data,ok_process=ok_process,headers={},fail_process=fail_process2);
 
 }
 function candidate() {
@@ -74,7 +107,8 @@ console.log("candidate");
     'csrfmiddlewaretoken': '{{ csrf_token }}'
     }
     console.log("data:",data);
-    temp_query('{% url 'words_puzzle:api'%}',data,ok_process=ok_process,headers={},fail_process=fail_process2);
+    //temp_query('{% url 'words_puzzle:api'%}',data,ok_process=ok_process,headers={},fail_process=fail_process2);
+    temp_query_cust('{% url 'words_puzzle:api'%}',data,ok_process);
 
 }
 function validImageType(image) {
@@ -98,9 +132,14 @@ function setThumbnail(event) {
     }
 }
 
+
+
 {% endblock %}
 
 {% block on_load_js %}
+
+//$('#id_loading').hide();
+$('#image_container').hide();
 
 get_session();
 
@@ -121,7 +160,8 @@ $("#id_input_refword").on("click", function () {
             ref_words:$('#id_input').val(),
             'csrfmiddlewaretoken': '{{ csrf_token }}'
             }
-         temp_query('{% url 'words_puzzle:api'%}',data,ok_process=ok_process,headers={},fail_process=fail_process2);
+          temp_query_cust('{% url 'words_puzzle:api'%}',data,ok_process);
+         //temp_query('{% url 'words_puzzle:api'%}',data,ok_process=ok_process,headers={},fail_process=fail_process2);
 
 
      navigator.clipboard.readText()
@@ -171,7 +211,8 @@ $("#id_input_search").on("click", function () {
     'csrfmiddlewaretoken': '{{ csrf_token }}'
     }
     console.log("data:",data);
-    temp_query('{% url 'words_puzzle:api'%}',data,ok_process=ok_process,headers={},fail_process=fail_process2);
+    temp_query_cust('{% url 'words_puzzle:api'%}',data,ok_process);
+    //temp_query('{% url 'words_puzzle:api'%}',data,ok_process=ok_process,headers={},fail_process=fail_process2);
 
 });
 $("#id_get_refword").on("click", function () {
@@ -188,7 +229,8 @@ $("#id_get_refword").on("click", function () {
     'csrfmiddlewaretoken': '{{ csrf_token }}'
     }
     console.log("data:",data);
-    temp_query('{% url 'words_puzzle:api'%}',data,ok_process=ok_process,headers={},fail_process=fail_process2);
+    //temp_query('{% url 'words_puzzle:api'%}',data,ok_process=ok_process,headers={},fail_process=fail_process2);
+    temp_query_cust('{% url 'words_puzzle:api'%}',data,ok_process);
 
 });
 $("#id_candidate").on("click",candidate );
@@ -216,8 +258,25 @@ $('#id_input_upload').on("change", (evt) => {
         //var img = document.createElement("img");
         //img.setAttribute("src", event.target.result);
         //document.querySelector("div#image_container").appendChild(img);
-        $('#image_container').html("<img src='{0}'>".format(event.target.result))
+
+
+         var img = new Image();
+               img.onload = function(){
+                  var height = img.height;
+                  var width = img.width;
+                    console.log("#img",img.width,img.height)
+                    cls_name = (img.width==1080 && img.width==2400)?"":"_stproc";
+                    $('#image_container').children('img').attr("src",event.target.result);
+                    $('#image_container').show();
+                    //$('#image_container').html("<img src='{0}' class='{1}'> ".format(event.target.result,cls_name))
+                        
+
+                  // code here to use the dimensions
+                }
+
+            img.src = event.target.result;
       };
+
 
       console.log(image);
       reader.readAsDataURL(image);
@@ -230,12 +289,33 @@ $("#id_clear").on("click", function () {
 
       console.log("id_input_search");
 
-    $('#image_container').html("");
+    $('#image_container').hide();
     $('#id_input').val("");
 
 
 } );
 
+$("#id_test_loading").on("click", function () {
+    isattr = $("#id_test_loading").attr("test");
+    console.log('id_test_loading',isattr,typeof(isattr),typeof(true));
+
+
+    if(isattr == "true"){
+        console.log('id_test_loading if',isattr);
+        LoadingWithMask();
+
+        $("#id_test_loading").attr("test",false);
+        console.log('id_test_loading after',$("#id_test_loading").attr("test"));
+    }
+    else{
+        console.log('id_test_loading else');
+        closeLoadingWithMask();
+        $("#id_test_loading").attr("test",true);
+    }
+
+
+
+} );
 
 
 {% endblock %}
@@ -254,14 +334,24 @@ $("#id_clear").on("click", function () {
 <h2 id="id_refwords"></h2>
 <h3 id="id_search_word"></h3>
 
-<div class="alert alert-dark" role="alert" id="id_msg"></div>
+<div class="alert alert-dark" role="alert" id="id_msg">
+
+
+</div>
 
 <div class="alert alert-danger" role="alert" id="id_alert">
 
 </div>
+
+    <div id="image_container" width="100%">
+       <img src="data:," alt="책상이미지" usemap="#photo" >
+        <map name="photo">
+            <area shape="rect" coords="185,45,450,400" href="#" alt="노트북이미지">
+        </map>
+    </div>
 <div class="card" style="width: 18rem;">
   <ul class="list-group list-group-flush" id="id_select">
-<!--    <li class="list-group-item">An item</li>-->
+    <li class="list-group-item">NO ITEM</li>
 <!--    <li class="list-group-item">A second item</li>-->
 <!--    <li class="list-group-item">A third item</li>-->
   </ul>
@@ -272,14 +362,17 @@ $("#id_clear").on("click", function () {
     <!--        <label for="id_search_word" class="form-label">검색단어</label>-->
     <!--        <input type="email" class="form-control" id="id_search_word" placeholder="**가*" value="*크*늬">-->
     <!--    </div>-->
-
-    <div id="image_container" width="100%"></div>
+    <div id="id_loading"  >
+<div class="d-flex align-items-center" >
+  <strong>Loading...</strong>
+  <div class="spinner-border ml-auto" role="status" aria-hidden="true" ></div>
+</div>
+        </div>
     <div class="row ">
 
 
 
             <textarea class="form-control" id="id_input" rows="3" placeholder="예) **다**"></textarea>
-
 
 
     </div>
@@ -292,28 +385,15 @@ $("#id_clear").on("click", function () {
        <div class="col-auto col">
            <button type="submit" class="btn btn-primary mb-3" id="id_candidate">입력</button>
         </div>
-
-
-    </div>
-       <div class="row">
-        <div class="col-auto">
-            <button type="submit" class="btn btn-primary mb-3" id="id_clipboard">클립보드복사</button>
-        </div>
-
-           <div class="col-auto">
-            <button type="submit" class="btn btn-primary mb-3" id="id_get_refword">후보단어 가져오기</button>
-        </div>
-
-        <div class="col-auto">
-            <button type="submit" class="btn btn-primary mb-3" id="id_input_search">총가지수</button>
-        </div>
-
-          <div class="col-auto col ">
+         <div class="col-auto col ">
         <button type="submit" class="btn btn-primary mb-3" id="id_input_refword">후보단어</button>
         </div>
 
-
     </div>
+
+
+<br/>
+
 
      <div class="row ">
           <div class="col-auto col">
@@ -325,7 +405,28 @@ $("#id_clear").on("click", function () {
         </div>
      </div>
 
+    <div class="row">
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary mb-3" id="id_clipboard">클립보드복사</button>
+        </div>
 
+           <div class="col-auto">
+            <button type="submit" class="btn btn-primary mb-3" id="id_get_refword">후보단어 가져오기</button>
+        </div>
+
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary mb-3" id="id_input_search">총가지수</button>
+        </div>
+          <div class="col-auto">
+            <button type="submit" class="btn btn-primary mb-3" id="id_test_loading">테스트 로딩</button>
+        </div>
+
+<!--          <div class="col-auto col ">-->
+<!--        <button type="submit" class="btn btn-primary mb-3" id="id_input_refword">후보단어</button>-->
+<!--        </div>-->
+
+
+    </div>
 
 </div>
 

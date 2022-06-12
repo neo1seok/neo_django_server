@@ -28,7 +28,7 @@ err_process=function(error) {"error",console.log(error);})
 {
     var sid = get_session_uid();
     data['sid'] = sid;
-    console.log("query",url,sid);
+    console.log("temp_query",url,sid,ok_process);
     var query_time = get_cur_time()
 
     $.ajax({
