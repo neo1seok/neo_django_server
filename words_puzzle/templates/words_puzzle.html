@@ -140,6 +140,7 @@ function setThumbnail(event) {
 
 //$('#id_loading').hide();
 $('#image_container').hide();
+$('._etc_div').hide();
 
 get_session();
 
@@ -317,6 +318,12 @@ $("#id_test_loading").on("click", function () {
 
 } );
 
+$("#id_toggle").on("click", function () {
+
+    $('._etc_div').toggle();
+
+} );
+
 
 {% endblock %}
 
@@ -368,58 +375,44 @@ $("#id_test_loading").on("click", function () {
   <div class="spinner-border ml-auto" role="status" aria-hidden="true" ></div>
 </div>
         </div>
-    <div class="row ">
 
 
 
+    <div class="">
             <textarea class="form-control" id="id_input" rows="3" placeholder="예) **다**"></textarea>
-
-
     </div>
+     <div class="">
+            <button type="submit" class="btn btn-primary mb-3" id="id_astrik">*</button>
+             <button type="submit" class="btn btn-primary mb-3" id="id_candidate">입력</button>
 
-   <div class="row  _cls_input">
+            <button type="submit" class="btn btn-primary mb-3" id="id_input_refword">후보단어</button>
 
-       <div class="col-auto col">
-       <button type="submit" class="btn btn-primary mb-3" id="id_astrik">*</button>
-       </div>
-       <div class="col-auto col">
-           <button type="submit" class="btn btn-primary mb-3" id="id_candidate">입력</button>
-        </div>
-         <div class="col-auto col ">
-        <button type="submit" class="btn btn-primary mb-3" id="id_input_refword">후보단어</button>
-        </div>
+     </div>
 
-    </div>
+
+
+
+
 
 
 <br/>
 
 
-     <div class="row ">
-          <div class="col-auto col">
+     <div class=" ">
+
             <input type="file"  class="btn btn-primary mb-3 "name="file" id="id_input_upload" accept="image/*">
-        </div>
-           <div class="col-auto col">
-               <button type="submit" class="btn btn-primary mb-3" id="id_clear">비우기</button>
 
-        </div>
+
+
      </div>
+     <button type="submit" class="btn" id="id_toggle"> >> </button>
+    <div class="_etc_div">
 
-    <div class="row">
-        <div class="col-auto">
+            <button type="submit" class="btn btn-primary mb-3" id="id_clear">비우기</button>
             <button type="submit" class="btn btn-primary mb-3" id="id_clipboard">클립보드복사</button>
-        </div>
-
-           <div class="col-auto">
             <button type="submit" class="btn btn-primary mb-3" id="id_get_refword">후보단어 가져오기</button>
-        </div>
-
-        <div class="col-auto">
             <button type="submit" class="btn btn-primary mb-3" id="id_input_search">총가지수</button>
-        </div>
-          <div class="col-auto">
             <button type="submit" class="btn btn-primary mb-3" id="id_test_loading">테스트 로딩</button>
-        </div>
 
 <!--          <div class="col-auto col ">-->
 <!--        <button type="submit" class="btn btn-primary mb-3" id="id_input_refword">후보단어</button>-->
