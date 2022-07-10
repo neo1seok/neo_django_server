@@ -76,3 +76,20 @@ width:100%
 
   clip: rect( 34px, 1304px, 1049px, 1794px );
 }
+._main_div{
+display: flex;
+flex-wrap: wrap;
+justify-content: space-between;
+}
+._cls_input{
+flex-basis: 30%;
+//flex-grow: 1;
+}
+._img_div{
+display: block
+}
+.__etc_div{
+display: flex;
+flex-wrap: wrap;
+justify-content: space-between;
+}
