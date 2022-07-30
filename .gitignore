@@ -55,6 +55,7 @@ app/
 *.old
 *.tmp
 *.csv
+*.whl
 .svn/
 .*/
 debug/
