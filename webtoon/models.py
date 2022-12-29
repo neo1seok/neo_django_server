@@ -25,12 +25,12 @@ class Webtoon(models.Model):
 	#prt_uid = models.TextField()  # varchar(20)
 	portal = models.ForeignKey(Portal, on_delete=models.CASCADE)
 	title = models.CharField(max_length=64)  # varchar(64)
-	today_title = models.TextField()  # text
+	today_title = models.TextField(null=True)  # text
 	wid = models.CharField(max_length=32)  # varchar(32)
-	lastno = models.CharField(max_length=32)  # varchar(32)
+	lastno = models.CharField(max_length=32,null=True)  # varchar(32)
 	dates = models.CharField(max_length=32)  # varchar(32)
 	status = models.CharField(max_length=20)  # varchar(20)
-	comment = models.TextField()  # varchar(20)
+	comment = models.TextField(default=None,null=True)  # varchar(20)
 	updt_date = models.DateTimeField(auto_now_add=True)
 	reg_date = models.DateTimeField(auto_now=True)
 

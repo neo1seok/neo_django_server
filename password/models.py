@@ -20,7 +20,7 @@ class Password(models.Model):
 	ptail = models.CharField(max_length=64)
 	site_id = models.CharField(max_length=64,blank=True)
 	etc = models.TextField(blank=True)
-	status = models.CharField(max_length=20,blank=True)
+	status = models.CharField(max_length=20,blank=True,null=True)
 	updt_date = models.DateTimeField(auto_now_add=True)
 	reg_date = models.DateTimeField(auto_now=True)
 

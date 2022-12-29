@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/3.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
+import datetime
 import logging
 import os
 from django.db.backends.mysql.base import DatabaseWrapper
@@ -41,6 +42,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_extensions',
     'rest_framework',
+     'rest_framework_swagger',
+    #'django.contrib.staticfiles',  # required for serving swagger ui's css/js files
+    'drf_yasg',
     #'oauth2_provider',#python oauth2 설치 , admin 화면에  acces token 내용 추가 , migrate 를 해줘야 됨
     'password',
     'access',
@@ -84,19 +88,32 @@ TEMPLATES = [
         },
     },
 ]
-REST_FRAMEWORK_ = {
+REST_FRAMEWORK = {
     #'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10,
+    #
+
+    'DEFAULT_PERMISSION_CLASSES': (
+
+        'rest_framework.permissions.IsAuthenticated',
+    ),
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
       #  'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
     ],
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-        'rest_framework.permissions.IsAuthenticated',
-    )
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
+
 }
+
+JWT_AUTH = {
+    'JWT_SECRET_KEY': SECRET_KEY,
+    'JWT_ALGORITHM': 'HS256',
+    'JWT_ALLOW_REFRESH': True,
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7),
+    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=28),
+}
+
 OAUTH2_PROVIDER = {
     # this is the list of available scopes
     'SCOPES': {'read': 'Read scope', 'write': 'Write scope', 'groups': 'Access to your groups'}

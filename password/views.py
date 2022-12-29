@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.urls import resolve
 from django.utils import timezone
 from django.views import generic
+from rest_framework import viewsets, permissions
 
 from comm.function import exam_function
 from .forms import PasswordForm
@@ -11,6 +12,8 @@ from django.shortcuts import render, get_object_or_404
 from django.shortcuts import redirect
 
 #from django.core.urlresolvers import resolve
+from .serializers import PasswordSerializer, PasswordHeaderSerializer
+
 
 def appname(request):
 	return {'appname': resolve(request.path).app_name}
@@ -127,7 +130,17 @@ class PasswordHeaderDetailView(generic.DetailView):
 # 	password = get_object_or_404(Password, pk=pk)
 # 	return render(request, 'password_detail.html', {'password': password})
 #
+class PasswordViewSet(viewsets.ModelViewSet):
+	#authentication_classes = [SessionAuthentication, BasicAuthentication]
+	permission_classes = [permissions.IsAdminUser,permissions.IsAuthenticated]
+	queryset = Password.objects.all()
+	serializer_class = PasswordSerializer
 
+class PasswordHeaderViewSet(viewsets.ModelViewSet):
+	#authentication_classes = [SessionAuthentication, BasicAuthentication]
+	permission_classes = [permissions.IsAdminUser,permissions.IsAuthenticated]
+	queryset = Password.objects.all()
+	serializer_class = PasswordHeaderSerializer
 
 class IndexView(generic.ListView):
 	template_name = 'index.html'

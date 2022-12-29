@@ -1,7 +1,9 @@
 from django.shortcuts import render
 
 # Create your views here.
+from django.utils.decorators import method_decorator
 from django.views import generic
+from drf_yasg.utils import swagger_auto_schema
 
 from .forms import WebtoonForm
 from .models import Webtoon
@@ -36,7 +38,9 @@ class WebtoonListView(generic.ListView):
 		return context
 
 
-
+# @method_decorator(name='list', decorator=swagger_auto_schema(
+#     operation_description="description from swagger_auto_schema via method_decorator"
+# ))
 class WebtoonViewSet(viewsets.ModelViewSet):
 	#authentication_classes = [SessionAuthentication, BasicAuthentication]
 	permission_classes = [permissions.IsAdminUser,permissions.IsAuthenticated]
