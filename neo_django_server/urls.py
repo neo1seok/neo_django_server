@@ -38,11 +38,11 @@ from rest_framework_swagger.views import get_swagger_view
 
 router = routers.DefaultRouter()
 router.register(r'webtoon', WebtoonViewSet)
-router.register(r'private_link', PrivateLinkViewSet)
-router.register(r'password', PasswordViewSet)
-router.register(r'password_header', PasswordHeaderViewSet)
-router.register(r'health_bp', HealthBpViewSet)
-router.register(r'health_weight', HealthWeightViewSet)
+# router.register(r'private_link', PrivateLinkViewSet)
+# router.register(r'password', PasswordViewSet)
+# router.register(r'password_header', PasswordHeaderViewSet)
+# router.register(r'health_bp', HealthBpViewSet)
+# router.register(r'health_weight', HealthWeightViewSet)
 
 
 print(router.urls)
@@ -58,12 +58,12 @@ schema_view_v1 = get_schema_view(
         terms_of_service="https://www.google.com/policies/terms/",
     ),
     public=True,
-    permission_classes=(AllowAny,),
+    permission_classes=[AllowAny,],
     patterns=    router.urls
     ,
 )
 from rest_framework.documentation import include_docs_urls
-schema_view = get_swagger_view(title='Pastebin API')
+#schema_view = get_swagger_view(title='Pastebin API')
 docs_view = include_docs_urls(
     title='drf API',
     description='API document'
@@ -92,8 +92,9 @@ urlpatterns = [
     path('api/token/refresh/', refresh_jwt_token),
 
     re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
-    re_path(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    re_path(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+    re_path(r'^swagger/$', schema_view_v1.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    re_path(r'^swagger2/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    re_path(r'^redoc/$', schema_view_v1.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 
     # path('docs/', docs_view),
     # path('swagger2/', schema_view),
