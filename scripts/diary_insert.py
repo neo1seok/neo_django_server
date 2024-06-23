@@ -17,6 +17,6 @@ def run():
 		#print(tmp['no'])
 		tmp = AttributeDict(tmp)
 		tmp['pk'] = pk
-		DiaryContents.objects.create(title = tmp.title,text= tmp.text,date_title= tmp.date_title)
+		#DiaryContents.objects.create(title = tmp.title,text= tmp.text,date_title= tmp.date_title)
 		pk +=1
 		

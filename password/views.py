@@ -4,7 +4,10 @@ from django.urls import resolve
 from django.utils import timezone
 from django.views import generic
 from rest_framework import viewsets, permissions
+from rest_framework.pagination import PageNumberPagination
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
+from comm.base_class import BaseModelViewSet
 from comm.function import exam_function
 from .forms import PasswordForm
 from .models import Password, PasswordHeader
@@ -130,16 +133,14 @@ class PasswordHeaderDetailView(generic.DetailView):
 # 	password = get_object_or_404(Password, pk=pk)
 # 	return render(request, 'password_detail.html', {'password': password})
 #
-class PasswordViewSet(viewsets.ModelViewSet):
-	#authentication_classes = [SessionAuthentication, BasicAuthentication]
-	permission_classes = [permissions.IsAdminUser,permissions.IsAuthenticated]
+
+class PasswordViewSet(BaseModelViewSet):
 	queryset = Password.objects.all()
 	serializer_class = PasswordSerializer
 
-class PasswordHeaderViewSet(viewsets.ModelViewSet):
-	#authentication_classes = [SessionAuthentication, BasicAuthentication]
-	permission_classes = [permissions.IsAdminUser,permissions.IsAuthenticated]
-	queryset = Password.objects.all()
+
+class PasswordHeaderViewSet(BaseModelViewSet):
+	queryset = PasswordHeader.objects.all()
 	serializer_class = PasswordHeaderSerializer
 
 class IndexView(generic.ListView):
@@ -147,18 +148,6 @@ class IndexView(generic.ListView):
 	model = Password
 	context_object_name = 'passwords'
 
-	# def get_queryset(self):
-	#     """Return the last five published questions."""
-	#     return Question.objects.order_by('-pub_date')[:5]
-	#
-	# def get_queryset(self):
-	# 	"""
-	# 	Return the last five published questions (not including those set to be
-	# 	published in the future).
-	# 	"""
-	# 	return Password.objects.filter(
-	# 		updt_date__lte=timezone.now()
-	# 	).order_by('-updt_date')[:5]
 
 	def get_context_data(self, **kwargs):
 		# Call the base implementation first to get a context

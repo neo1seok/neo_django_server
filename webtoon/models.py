@@ -11,8 +11,12 @@ class Portal(models.Model):
 	name = models.CharField(max_length=20) #varchar(20)
 	search_form = models.CharField(max_length=256) #varchar(256)
 	list_webtoon = models.TextField() #text
-
 	contents_webtoon = models.TextField() #text
+
+	list_webtoon_m = models.TextField(null=True)  # text
+	contents_webtoon_m = models.TextField(null=True)  # text
+
+	img_url = models.TextField(null=True)  # text
 
 	main_url = models.CharField(max_length=256) #varchar(256)
 	etc = models.TextField() #text
@@ -26,9 +30,11 @@ class Webtoon(models.Model):
 	portal = models.ForeignKey(Portal, on_delete=models.CASCADE)
 	title = models.CharField(max_length=64)  # varchar(64)
 	today_title = models.TextField(null=True)  # text
-	wid = models.CharField(max_length=32)  # varchar(32)
+	title_id = models.CharField(max_length=32)  # varchar(32)
 	lastno = models.CharField(max_length=32,null=True)  # varchar(32)
 	dates = models.CharField(max_length=32)  # varchar(32)
+	main_img = models.TextField(null=True)  # varchar(32)
+	last_img = models.TextField(null=True)  # varchar(32)
 	status = models.CharField(max_length=20)  # varchar(20)
 	comment = models.TextField(default=None,null=True)  # varchar(20)
 	updt_date = models.DateTimeField(auto_now_add=True)

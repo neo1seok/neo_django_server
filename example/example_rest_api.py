@@ -2,6 +2,8 @@ import requests
 
 
 
-r = requests.post("http://127.0.0.1:8000/api/webtoon/")
+#r = requests.get("http://127.0.0.1:8080/api/webtoon/?status=active")
+r = requests.get("http://127.0.0.1:8080/api/webtoon/?status=active")
 
-print(r.json())
+print(r)
+print(r.text)

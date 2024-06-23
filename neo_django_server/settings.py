@@ -43,8 +43,11 @@ INSTALLED_APPS = [
     'django_extensions',
     'rest_framework',
      'rest_framework_swagger',
+    'rest_framework_simplejwt',
+
     #'django.contrib.staticfiles',  # required for serving swagger ui's css/js files
     'drf_yasg',
+    'corsheaders',
     #'oauth2_provider',#python oauth2 설치 , admin 화면에  acces token 내용 추가 , migrate 를 해줘야 됨
     'password',
     'access',
@@ -60,17 +63,23 @@ INSTALLED_APPS = [
 
 
 ]
+CORS_ALLOW_ALL_ORIGINS = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+#    'django.middleware.common.CommonMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+]
 ROOT_URLCONF = 'neo_django_server.urls'
 
 TEMPLATES = [
@@ -96,14 +105,20 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
 
         'rest_framework.permissions.IsAuthenticated',
+
+
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        #'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
       #  'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
     ],
-    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10  # 페이지 당 객체 수
 
 }
 
@@ -145,7 +160,7 @@ DATABASES = {
         'NAME': 'neo_django_server',  # DB명
         'USER': 'neo1seok',  # 데이터베이스 계정
         'PASSWORD': 'tofhdna1pi',  # 계정 비밀번호
-        'HOST': '192.168.219.17',  # 데이테베이스 주소(IP)
+        'HOST': '192.168.1.17',  # 데이테베이스 주소(IP)
         'PORT': '3306',  # 데이터베이스 포트(보통은 330
         # 'OPTIONS': {
         #     'read_default_file': 'my.cnf',
@@ -256,3 +271,20 @@ LOGGING = {
 
     }
 }
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+        }
+    },
+    'USE_SESSION_AUTH': False,
+    'JSON_EDITOR': True,
+    'REFETCH_SCHEMA_ON_LOGOUT': True,
+    'SUPPORTED_SUBMIT_METHODS': [
+        'get', 'post', 'put', 'delete', 'patch'
+    ],
+}
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
