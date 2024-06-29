@@ -1,10 +1,15 @@
+from django.http import Http404
 from django.shortcuts import render
 from django.shortcuts import render
 from django.urls import resolve
 from django.utils import timezone
 from django.views import generic
-from rest_framework import viewsets, permissions
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework import viewsets, permissions, status
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.viewsets import GenericViewSet
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from comm.base_class import BaseModelViewSet
@@ -15,7 +20,8 @@ from django.shortcuts import render, get_object_or_404
 from django.shortcuts import redirect
 
 #from django.core.urlresolvers import resolve
-from .serializers import PasswordSerializer, PasswordHeaderSerializer
+from .serializers import PasswordSerializer, PasswordHeaderSerializer, PasswordDetailSerializer, \
+	PasswordCreateSerializer
 
 
 def appname(request):
@@ -136,12 +142,76 @@ class PasswordHeaderDetailView(generic.DetailView):
 
 class PasswordViewSet(BaseModelViewSet):
 	queryset = Password.objects.all()
-	serializer_class = PasswordSerializer
+	serializer_class = PasswordDetailSerializer
+	def create(self, request, *args, **kwargs):
+		ret = super().create(request, *args, **kwargs)
+		print("ret",ret.data)
+		ret.data = dict(id = ret.data['id'])
+		return ret
+	def create_(self, request, *args, **kwargs):
+		ret = super().create(request, *args, **kwargs)
+		print("create",request.data)
+		serializer = self.get_serializer(data=request.data)
+		serializer.is_valid(raise_exception=True)
+		self.perform_create(serializer)
+		print("perform_create after")
+		headers = self.get_success_headers(serializer.data)
+		print("headers ",headers)
 
+		return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+	#
+	# def perform_create(self, serializer):
+	# 	print("perform_create")
+	# 	serializer.save()
+	def get_serializer_class(self):
+		print("get_serializer_class",self.action)
+		if self.action == 'list':
+			return PasswordSerializer
+		# if self.action == 'create':
+		# 	print("",self.action)
+		# 	return PasswordCreateSerializer
+
+		return super().get_serializer_class()
+
+	# def get_serializer(self, *args, **kwargs):
+	# 	print("get_serializer", self.action)
+	# 	if self.action == 'list':
+	# 		serializer_class = PasswordSerializer
+	# 	# if self.action == 'create':
+	# 	# 	serializer_class = PasswordCreateSerializer
+	# 	else:
+	# 		serializer_class = PasswordDetailSerializer
+	#
+	# 	kwargs['context'] = self.get_serializer_context()
+	# 	return serializer_class(*args, **kwargs)
 
 class PasswordHeaderViewSet(BaseModelViewSet):
 	queryset = PasswordHeader.objects.all()
 	serializer_class = PasswordHeaderSerializer
+class PasswordDetailDetail(GenericViewSet):
+	def get_object(self, pk):
+		try:
+			return Password.objects.get(pk=pk)
+		except Password.DoesNotExist:
+			raise Http404
+
+	def get(self, request, pk):
+		password_detail = self.get_object(pk)
+		serializer = PasswordDetailSerializer(password_detail)
+		return Response(serializer.data)
+
+	def put(self, request, pk):
+		password_detail = self.get_object(pk)
+		serializer = PasswordDetailSerializer(password_detail, data=request.data)
+		if serializer.is_valid():
+			serializer.save()
+			return Response(serializer.data)
+		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+	def delete(self, request, pk):
+		password_detail = self.get_object(pk)
+		password_detail.delete()
+		return Response(status=status.HTTP_204_NO_CONTENT)
 
 class IndexView(generic.ListView):
 	template_name = 'index.html'

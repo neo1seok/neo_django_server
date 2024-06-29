@@ -8,6 +8,7 @@ class PasswordHeader(models.Model):
 	hint = models.TextField(blank=True)
 	special_letter = models.CharField(max_length=5)
 	etc = models.TextField(blank=True)
+	comment = models.TextField(blank=True)
 	updt_date = models.DateTimeField(auto_now_add=True)
 	reg_date = models.DateTimeField(auto_now=True)
 
@@ -21,6 +22,7 @@ class Password(models.Model):
 	site_id = models.CharField(max_length=64,blank=True)
 	etc = models.TextField(blank=True)
 	status = models.CharField(max_length=20,blank=True,null=True)
+	comment = models.TextField(blank=True,null=True)
 	updt_date = models.DateTimeField(auto_now_add=True)
 	reg_date = models.DateTimeField(auto_now=True)
 

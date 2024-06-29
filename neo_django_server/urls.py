@@ -30,7 +30,7 @@ from rest_framework_simplejwt.views import (
 
 
 from health.views import HealthBpViewSet,HealthWeightViewSet
-from password.views import PasswordViewSet, PasswordHeaderViewSet
+from password.views import PasswordViewSet, PasswordHeaderViewSet, PasswordDetailDetail
 from private_link.views import PrivateLinkViewSet
 from webtoon.views import WebtoonViewSet
 
@@ -86,12 +86,14 @@ schema_view = get_schema_view(
 
 router = routers.DefaultRouter()
 router.register(r'webtoon', WebtoonViewSet)
+#router.register(r'password', PasswordDetailDetail)
+
 #router.register(r'webtoon', WebtoonViewSet)
-router.register(r'private_link', PrivateLinkViewSet)
+#router.register(r'private_link', PrivateLinkViewSet)
 router.register(r'password', PasswordViewSet)
 router.register(r'password_header', PasswordHeaderViewSet)
-router.register(r'health_bp', HealthBpViewSet)
-router.register(r'health_weight', HealthWeightViewSet)
+#router.register(r'health_bp', HealthBpViewSet)
+#router.register(r'health_weight', HealthWeightViewSet)
 print(router.urls)
 mvc_url =[
     path('main/', include(('main.urls', 'main'), namespace='main')),
